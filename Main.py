@@ -408,15 +408,18 @@ async def on_member_update(before, after):
 @client.event
 async def on_voice_state_update(member,before,after):
     if after.channel is not None and after.channel.id in client.general_data["Settings"]["Channels"]["createvoice"] :
-        if before.channel is not None and not before.channel.id in client.permanentchannels and before.channel.members==[]:
+        if before.channel is not None and before.channel.id in client.temporary_channels and before.channel.members==[]:
             await before.channel.delete()
+
         if member.activity!=None :
+
             for i in member.activities :
+
                 if "ActivityType.playing:" in str(i):
                     channame=str(str(i).split("name='")[1].split("'")[0])
                     channel = await after.channel.clone(name="🔊 "+channame)
                     await member.move_to(channel)
-                    print(member,"move to",channame)
+                    debugprint("(Created Channel)", member,"moved to",channame)
                     return
                     
         channame="🔊 "+member.display_name
@@ -425,6 +428,7 @@ async def on_voice_state_update(member,before,after):
         await member.move_to(channel)
         client.temporary_channels.append(channel.id)
         return
+    
     if before.channel is not None and before.channel.id in client.temporary_channels and before.channel.members==[]:#Values to change
         await before.channel.delete()
         client.temporary_channels.remove(before.channel.id)
