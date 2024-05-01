@@ -101,26 +101,3 @@ async def transferMessage(message: discord.Message, destination: destinationChan
             embed=embed,
             files=files if len(files) > 0 else None
         )
-
-async def logger(
-    client: discord.Client,
-    interaction:discord.Interaction,
-    function:str,
-    content:str
-):
-    embed = discord.Embed(
-        title=f"Command Log: __{function}__",
-        description=content,
-        timestamp=current_time(),
-    )
-    embed.add_field(name="Command Environement:",value=f"- Guild: {interaction.guild.name}\n- Channel: <#{interaction.channel_id}>\n- Author:\n  - Display Name: {interaction.user.display_name} - {interaction.user.mention}\n  - Roles: {', '.join([r.mention for r in interaction.user.roles[1:-1]])}")
-    embed.set_author(
-        name=interaction.user.name,icon_url=interaction.user.avatar.url,url=f"https://discord.com/channels/@me/{interaction.user.id}"
-    )
-    
-    for channel_id in client.general_data["Settings"]["Setup"]["Logging Channel"]:
-        
-        channel = client.get_channel(channel_id)
-        
-        if interaction.guild_id != 972864191226605648 or channel.guild.id == interaction.guild_id:
-            await channel.send(embed=embed)
