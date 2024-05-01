@@ -1,0 +1,5 @@
+.env
+BDD.json
+*.txt
+Bot.py
+__pycache__/*
