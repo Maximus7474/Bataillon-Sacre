@@ -19,7 +19,7 @@ TOKEN = os.getenv("TOKEN")
 client = discord.Client(intents=Intents.all())
 tree = app_commands.CommandTree(client)
 client.general_data = {}
-client.temporary_data = {}
+client.temporary_channels = []
 
 client.DemoMode = True
 
@@ -403,6 +403,32 @@ async def on_member_remove(member):
 @client.event
 async def on_member_update(before, after):
     pass
+
+@client.event
+async def on_voice_state_update(member,before,after):
+    if after.channel is not None and after.channel.id == 1235246231593291888 : # 928819791123324928 :
+        if before.channel is not None and not before.channel.id in client.permanentchannels and before.channel.members==[]:
+            await before.channel.delete()
+        if member.activity!=None :
+            for i in member.activities :
+                if "ActivityType.playing:" in str(i):
+                    channame=str(str(i).split("name='")[1].split("'")[0])
+                    channel = await after.channel.clone(name="🔊 "+channame)
+                    await member.move_to(channel)
+                    print(member,"move to",channame)
+                    return
+                    
+        channame="🔊 "+member.display_name
+
+        channel = await after.channel.clone(name=channame)
+        await member.move_to(channel)
+        client.temporary_channels.append(channel.id)
+        return
+    if before.channel is not None and before.channel.id in client.temporary_channels and before.channel.members==[]:#Values to change
+        await before.channel.delete()
+        client.temporary_channels.remove(before.channel.id)
+        return
+
 
 ####################################################################################### TASKS
 
