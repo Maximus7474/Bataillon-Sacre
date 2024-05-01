@@ -1,0 +1,30 @@
+{
+    "Settings": {
+        "Guild": null,
+        "Channels": {
+            "arrival": null,
+            "departure": null,
+            "logs": [
+                null
+            ],
+            "patchnote": null,
+            "DMs": [
+                null
+            ]
+        },
+        "Colors": {
+            "Success": 8440219,
+            "Normal": 2463422,
+            "Error": 9784118
+        },
+        "Roles": {
+            "Arrivant": null,
+            "Visiteur": null,
+            "MultiGaming": null
+        },
+        "Messages": {
+            "Rules": null
+        }
+    },
+    "Info Utilisateur": {}
+}
