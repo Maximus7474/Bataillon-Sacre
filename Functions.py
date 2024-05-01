@@ -68,7 +68,7 @@ async def logger(channels:discord.TextChannel, command_name:str, user:discord.Us
                 str(user.id),
                 "\n".join(arguments),
             ),
-            color = baseline_data["General Data"]["Colors"]["Normal"]
+            color = baseline_data["Settings"]["Colors"]["Normal"]
             ).set_thumbnail(url = user.avatar.url)
         )
 
