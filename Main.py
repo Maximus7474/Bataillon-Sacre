@@ -175,7 +175,7 @@ class patchNoteModal(discord.ui.Modal):
         )
         
         await logger(
-            channels=[client.get_channel(channel_id) for channel_id in client.general_data["Settings"]["Setup"]["logs"]],
+            channels=[client.get_channel(channel_id) for channel_id in client.general_data["Settings"]["Channels"]["logs"]],
             command_name="SendPatchnote",
             user=interaction.user,
             arguments=[msg_content]
