@@ -406,7 +406,7 @@ async def on_member_update(before, after):
 
 @client.event
 async def on_voice_state_update(member,before,after):
-    if after.channel is not None and after.channel.id == 1235246231593291888 : # 928819791123324928 :
+    if after.channel is not None and after.channel.id in client.general_data["Settings"]["Channels"]["createvoice"] :
         if before.channel is not None and not before.channel.id in client.permanentchannels and before.channel.members==[]:
             await before.channel.delete()
         if member.activity!=None :
