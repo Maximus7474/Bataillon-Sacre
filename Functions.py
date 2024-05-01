@@ -14,7 +14,8 @@ def debugprint(*args):
 
 def current_time(
     unix_format:bool=False,
-    part_of_day:bool=False
+    part_of_day:bool=False,
+    string_format:bool=False
 ) -> Union[datetime.datetime, str, int]:
     utc_now = datetime.datetime.now(pytz.utc)
     cet_timezone = pytz.timezone('Europe/Paris')
@@ -32,6 +33,9 @@ def current_time(
         
     if unix_format:
         return round(cet_now.timestamp())
+    
+    if string_format:
+        return cet_now.strftime("%d/%m/%Y, %H:%M:%S")
     
     return cet_now
 
