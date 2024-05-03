@@ -3,3 +3,6 @@ BDD.json
 *.txt
 Bot.py
 __pycache__/*
+Files/*
+package-lock.json
+Javascript Bot/node_modules/*
