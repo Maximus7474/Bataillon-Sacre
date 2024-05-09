@@ -10,7 +10,7 @@ module.exports = {
             .setColor(0x0099FF)
             .setTitle('Pong ?')
             .setDescription(`${client.ws.ping}ms`)
-            .setAuthor({ name: client.user.username, iconURL: client.user.displayAvatarURL({ dynamic: true, format: 'png', size: 512 }) })
+            .setAuthor({ name: client.user.username, iconURL: client.user.displayAvatarURL({ dynamic: true, format: 'png', size: 64 }) })
             // .setImage()
             .setTimestamp();
         return interaction.reply({
