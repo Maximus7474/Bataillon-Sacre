@@ -7,8 +7,9 @@ const initializeDatabase = () => {
         db.run(`CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT,
-            discord_id INTEGER,
-            date INTEGER DEFAULT (strftime('%s', 'now')),
+            discord_id TEXT,
+            signup_date INTEGER DEFAULT (strftime('%s', 'now')),
+            joined_date INTEGER,
             email TEXT,
             game_identifiers TEXT
         );`);
@@ -66,8 +67,25 @@ const executeTransaction = (statements) => {
     });
 };
 
+const executeQuery = (sql, params = []) => {
+    return new Promise((resolve, reject) => {
+        const db = new sqlite3.Database(`./data.db`);
+        db.get(sql, params, function (err, row) {
+            if (err) {
+                console.error('Error executing SQL statement:', err);
+                reject(err);
+            } else {
+                console.log('SQL statement executed successfully.');
+                resolve(row); // Resolve with the single row
+            }
+        });
+        db.close();
+    });
+};
+
 module.exports = {
     initializeDatabase,
     executeStatement,
-    executeTransaction
+    executeTransaction,
+    executeQuery
 };
