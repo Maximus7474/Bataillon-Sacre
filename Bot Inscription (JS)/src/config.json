@@ -1,0 +1,10 @@
+{
+    "channels": {
+        "inscription": "1235887936340234340"
+    },
+    "colors": {
+        "base": "#0099ff",
+        "success": "#0099ff",
+        "error": "#0099ff"
+    }
+}
