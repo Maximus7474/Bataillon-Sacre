@@ -2,7 +2,7 @@
 BDD.json
 *.txt
 Bot.py
-__pycache__/*
-Files/*
+. Files/*
 package-lock.json
-Javascript Bot/node_modules/*
+node_modules/
+Bot Gestion (Py)/__pycache__/
