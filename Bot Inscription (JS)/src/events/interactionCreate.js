@@ -12,14 +12,14 @@ module.exports = {
     type: "on",
     async call(client,interaction) {
         if(interaction.isChatInputCommand()) {
-            if(!Object.keys(client.commands).includes(interaction.commandName)) {logger.warn(`Command ${interaction.commandName} not found or loaded`); return interaction.reply({ephemeral: true, content:`Command not found please report this!`})}
+            if(!Object.keys(client.commands).includes(interaction.commandName)) {logger.warn(`Command ${interaction.commandName} not found or loaded`); return interaction.reply({ephemeral: true, content:`Commande introuvable, merci de le signaler !`})}
             const command = client.commands[interaction.commandName]
             try{
                 return await command.execute(client,interaction)
             }
             catch(error){
                 logger.error(error)
-                return interaction.reply({ephemeral: true, content:`Error executing command! Please try again, if error persists please report to a developer`})
+                return interaction.reply({ephemeral: true, content:`Erreur d'exécution de la commande ! Veuillez réessayer. Si l'erreur persiste, veuillez la signaler à un développeur.`})
                     .catch(() => "")
             }
         } else if (interaction.isModalSubmit()) {
