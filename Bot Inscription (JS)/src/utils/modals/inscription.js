@@ -47,7 +47,11 @@ async function inscriptionModalHandler (client, interaction) {
     const Embed = new EmbedBuilder()
         .setTitle('Réponse Inscription')
         .setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL({ dynamic: true, format: 'png', size: 512 }) })
-        .setDescription(`Inscription venant de: <@${discordID}> (${username})\n- Email: \`${email}\`\n- Identifiants:\n\`\`\`\n${identifiers !== '[""]' ? identifiers : "Aucun Partagé"}\n\`\`\``)
+        .setDescription(
+            `Inscription venant de: <@${discordID}> (${username})
+            > - Email: \`${email}\`
+            > - Identifiants:\n\`\`\`m\n${identifiers !== '[""]' ? "- " + JSON.parse(identifiers).join('\n- ') : "Aucun Partagé"}\n\`\`\``
+        )
         .setColor(colors.base);
 
     const responseEmbed = new EmbedBuilder()
