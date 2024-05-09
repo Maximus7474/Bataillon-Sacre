@@ -1,10 +1,12 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('@discordjs/builders');
-const { executeQuery } = require('../utils/database/sqliteHandler')
+const { PermissionsBitField } = require('discord.js');
+const { executeQuery } = require('../utils/database/sqliteHandler');
 
 module.exports = {
     register_command: new SlashCommandBuilder()
         .setName('info')
         .setDescription('Ouvrir le formulaire d\'inscription')
+        .setDefaultMemberPermissions(PermissionsBitField.Flags.KickMembers)
         .addSubcommand( subcommand =>
             subcommand
                 .setName('membre')
@@ -24,8 +26,7 @@ module.exports = {
                     .setDescription('L\'email recherché')
                     .setRequired(true)
                 )
-          )
-        .setDefaultMemberPermissions(),
+          ),
     async execute(client, interaction) {
         let query = "";
         let value = "";
