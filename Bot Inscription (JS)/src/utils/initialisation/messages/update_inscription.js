@@ -44,9 +44,11 @@ async function checkLastSignUpMessage(client) {
         const messages = await channel.messages.fetch({ limit: 5 });
         const clientMessage = messages.find(msg => msg.author.id === channel.client.user.id);
 
+        const { embed, components } = createSignUpEmbedWithButton();
         if (!clientMessage) {
-            const { embed, components } = createSignUpEmbedWithButton();
             await channel.send({ embeds: [embed], components: components });
+        } else {
+            await clientMessage.edit({ embeds: [embed], components: components });
         }
     } catch (error) {
         console.error("Error:", error);
