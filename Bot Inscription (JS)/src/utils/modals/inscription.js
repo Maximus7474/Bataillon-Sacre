@@ -24,9 +24,9 @@ const emailInput = new TextInputBuilder()
     .setStyle(TextInputStyle.Short);
 
 const identifierInput = new TextInputBuilder()
-    .setLabel('Inscrivez vos identifiants, format a respecté')
+    .setLabel('Vos identifiants de jeu, format a respecté')
     .setCustomId('identifierInput')
-    .setPlaceholder('(Optionnel)\nsteam:789123456\nepic:123546789')
+    .setPlaceholder('(Optionnel)\nsteam:789123456\nhttps://steamcommunity.com/id/iweester/\nepic:123546789')
     .setRequired(false)
     .setStyle(TextInputStyle.Paragraph);
 
