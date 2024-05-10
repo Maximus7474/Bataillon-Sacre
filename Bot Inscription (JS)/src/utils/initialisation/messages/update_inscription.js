@@ -10,7 +10,7 @@ function createSignUpEmbedWithButton() {
         .setTitle('Inscription')
         .setDescription('Pour rejoindre le Bataillon sacré vous pouvez formuler votre candidature ci-dessous en cliquant sur le bouton.')
         .setFields(
-            { name: "➣ Liens:", value: "[Groupe Steam](https://steamcommunity.com/groups/bs-commu)\n[Chaîne Youtube](https://www.youtube.com/channel/UCA5SHN5LH3Z7_A7RpG3IYtw)"}
+            { name: "<a:fleche:834376849382572082> Liens:", value: "[Groupe Steam](https://steamcommunity.com/groups/bs-commu)\n[Chaîne Youtube](https://www.youtube.com/channel/UCA5SHN5LH3Z7_A7RpG3IYtw)"}
         )
         .setImage("https://cdn.discordapp.com/attachments/957052651902738433/1235595707549749278/wp3126790rr.jpg");
 
