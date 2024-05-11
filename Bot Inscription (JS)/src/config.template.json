@@ -1,0 +1,11 @@
+{
+    "channels": {
+        "inscriptionlog": "channel_id",
+        "inscriptionmessage": "channel_id"
+    },
+    "colors": {
+        "base": "#0099ff",
+        "success": "#0099ff",
+        "error": "#0099ff"
+    }
+}

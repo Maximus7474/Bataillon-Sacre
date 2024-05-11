@@ -1,0 +1,26 @@
+{
+  "name": "bs-bot-inscription",
+  "version": "0.0.0",
+  "description": "Bot de gestion d'inscription du bataillon sacré",
+  "main": "src/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/main.js"
+  },
+  "keywords": [
+    "Discord",
+    "Discord.js",
+    "inscription",
+    "discord",
+    "bot"
+  ],
+  "author": "_maximusprime",
+  "license": "ISC",
+  "dependencies": {
+    "assert": "^2.0.0",
+    "colors": "^1.4.0",
+    "discord.js": "^14.8.0",
+    "dotenv": "^16.0.3",
+    "sqlite3": "^5.1.7"
+  }
+}

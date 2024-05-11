@@ -13,7 +13,8 @@
             ],
             "createvoice": [
                 null
-            ]
+            ],
+            "teamspeak status":null
         },
         "Colors": {
             "Success": 8440219,

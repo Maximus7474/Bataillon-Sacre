@@ -1,0 +1,37 @@
+const Discord = require("discord.js")
+const log = new require('../utils/logger.js')
+const logger = new log("interactionCreate") 
+const interaction_handler = require('../handlers/interaction_handler')
+
+const { inscriptionModalHandler } = require('../utils/modals/inscription');
+const { handleSignUpButtonInteraction } = require('../utils/initialisation/messages/update_inscription');
+
+
+module.exports = {
+    event: Discord.Events.InteractionCreate,
+    type: "on",
+    async call(client,interaction) {
+        if(interaction.isChatInputCommand()) {
+            if(!Object.keys(client.commands).includes(interaction.commandName)) {logger.warn(`Command ${interaction.commandName} not found or loaded`); return interaction.reply({ephemeral: true, content:`Commande introuvable, merci de le signaler !`})}
+            const command = client.commands[interaction.commandName]
+            try{
+                return await command.execute(client,interaction)
+            }
+            catch(error){
+                logger.error(error)
+                return interaction.reply({ephemeral: true, content:`Erreur d'exécution de la commande ! Veuillez réessayer. Si l'erreur persiste, veuillez la signaler à un développeur.`})
+                    .catch(() => "")
+            }
+        } else if (interaction.isModalSubmit()) {
+            await inscriptionModalHandler(client,interaction)
+        } else if (interaction.isButton()) {
+            await handleSignUpButtonInteraction(interaction);
+        } else {
+            return await interaction_handler(client,interaction)
+                .catch((err) => {
+                    logger.error(`Interaction handler had issue handling interaction ${interaction.customID} ${err}`)
+                })
+        }      
+        
+    }
+}

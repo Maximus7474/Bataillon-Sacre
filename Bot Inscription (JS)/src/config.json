@@ -1,0 +1,11 @@
+{
+    "channels": {
+        "inscriptionlog": "1235887936340234340",
+        "inscriptionmessage": "1200830790825693264"
+    },
+    "colors": {
+        "base": "#0099ff",
+        "success": "#0099ff",
+        "error": "#0099ff"
+    }
+}
