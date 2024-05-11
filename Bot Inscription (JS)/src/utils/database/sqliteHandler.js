@@ -11,7 +11,8 @@ const initializeDatabase = () => {
             signup_date INTEGER DEFAULT (strftime('%s', 'now')),
             joined_date INTEGER,
             email TEXT,
-            game_identifiers TEXT
+            game_identifiers TEXT,
+            parle_fr TEXT
         );`);
         console.log('Database initialized.');
     });

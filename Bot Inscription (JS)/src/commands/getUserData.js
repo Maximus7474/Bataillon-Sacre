@@ -67,6 +67,7 @@ module.exports = {
                 Email: \`${result.email}\`
                 Date d'inscription: <t:${result.signup_date}:R>
                 Date d'intégration: ${result.joined_date !== null ? `<t:${result.joined_date}:d>` : "**\`N'as pas encore été accepté\`**"}
+                Parle français: \`${result.parle_fr}\`
                 Identifiants:
                 \`\`\`m\n${"- " + JSON.parse(result.game_identifiers).join('\n- ')}\n\`\`\``,
                 inline: false
