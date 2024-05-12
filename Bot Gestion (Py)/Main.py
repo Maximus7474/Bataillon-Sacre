@@ -315,27 +315,27 @@ async def on_message(message):
 async def on_member_update(before, after):
     pass
 
-@client.event
-async def on_raw_reaction_add(payload):
-    if payload.message_id == client.general_data["Settings"]["Messages"]["Rules"] and payload.emoji.name == "✅" :
-        member = payload.member
+# @client.event
+# async def on_raw_reaction_add(payload):
+#     if payload.message_id == client.general_data["Settings"]["Messages"]["Rules"] and payload.emoji.name == "✅" :
+#         member = payload.member
         
-        await member.add_roles(*[client.actifGuild.get_role(id) for id in [client.general_data["Settings"]["Roles"]["Visiteur"], client.general_data["Settings"]["Roles"]["MultiGaming"]]])
+#         await member.add_roles(*[client.actifGuild.get_role(id) for id in [client.general_data["Settings"]["Roles"]["Visiteur"], client.general_data["Settings"]["Roles"]["MultiGaming"]]])
 
-        await member.remove_roles(client.actifGuild.get_role(client.general_data["Settings"]["Roles"]["Visiteur"]))
+#         await member.remove_roles(client.actifGuild.get_role(client.general_data["Settings"]["Roles"]["Visiteur"]))
 
-        await member.send("Règlement accepté, vous avez maintenant accès à notre espace visiteur.")
+#         await member.send("Règlement accepté, vous avez maintenant accès à notre espace visiteur.")
 
-@client.event
-async def on_raw_reaction_remove(payload):
-    if payload.message_id == client.general_data["Settings"]["Messages"]["Rules"] and payload.emoji.name == "✅" :
-        member = payload.member
+# @client.event
+# async def on_raw_reaction_remove(payload):
+#     if payload.message_id == client.general_data["Settings"]["Messages"]["Rules"] and payload.emoji.name == "✅" :
+#         member = payload.member
         
-        await member.remove_roles(*[client.actifGuild.get_role(id) for id in [client.general_data["Settings"]["Roles"]["Visiteur"], client.general_data["Settings"]["Roles"]["MultiGaming"]]])
+#         await member.remove_roles(*[client.actifGuild.get_role(id) for id in [client.general_data["Settings"]["Roles"]["Visiteur"], client.general_data["Settings"]["Roles"]["MultiGaming"]]])
 
-        await member.add_roles(client.actifGuild.get_role(client.general_data["Settings"]["Roles"]["Visiteur"]))
+#         await member.add_roles(client.actifGuild.get_role(client.general_data["Settings"]["Roles"]["Visiteur"]))
         
-        await member.send("Vous n'êtes plus en accord avec le règlement, vous n'avez plus accès à notre espace visiteur.")
+#         await member.send("Vous n'êtes plus en accord avec le règlement, vous n'avez plus accès à notre espace visiteur.")
 
 @client.event
 async def on_member_join(member):
