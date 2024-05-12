@@ -5,6 +5,7 @@ const interaction_handler = require('../handlers/interaction_handler')
 
 const { inscriptionModalHandler } = require('../utils/modals/inscription');
 const { handleSignUpButtonInteraction } = require('../utils/initialisation/messages/update_inscription');
+const { handleRulesButtonInteraction } = require('../utils/initialisation/messages/rules');
 
 
 module.exports = {
@@ -26,6 +27,7 @@ module.exports = {
             await inscriptionModalHandler(client,interaction)
         } else if (interaction.isButton()) {
             await handleSignUpButtonInteraction(interaction);
+            await handleRulesButtonInteraction(interaction);
         } else {
             return await interaction_handler(client,interaction)
                 .catch((err) => {

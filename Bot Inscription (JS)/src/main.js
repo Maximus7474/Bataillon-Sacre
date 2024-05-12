@@ -7,6 +7,7 @@ const register_commands = require('./utils/initialisation/register_commands')
 
 const { initializeDatabase } = require('./utils/database/sqliteHandler')
 const { checkLastSignUpMessage } = require('./utils/initialisation/messages/update_inscription')
+const { checkLastRulesMessage } = require('./utils/initialisation/messages/rules')
 
 assert(process.env.TOKEN, "A Discord Token for your bot is required ! Please go to your application page to get it! Set your token then as an enviormental variable with the TOKEN variable name!")
 
@@ -34,4 +35,5 @@ client.once(Discord.Events.ClientReady,(client)=>{
     register_commands(client,commands)
     initializeDatabase()
     checkLastSignUpMessage(client)
+    checkLastRulesMessage(client)
 })
