@@ -1,6 +1,6 @@
 const { ActionRowBuilder, ButtonBuilder, EmbedBuilder } = require('discord.js');
 
-const { channels } = require('../../../config.json');
+const { channels, colors } = require('../../../config.json');
 const { inscriptionModal } = require('../../modals/inscription');
 
 const buttonID = 'ouvrirInscription';
@@ -9,6 +9,7 @@ function createSignUpEmbedWithButton() {
     const embed = new EmbedBuilder()
         .setTitle('Inscription')
         .setDescription('Pour rejoindre le Bataillon sacré vous pouvez formuler votre candidature ci-dessous en cliquant sur le bouton.')
+        .setColor(colors.admin)
         .setFields(
             { name: "<a:fleche:834376849382572082> Liens:", value: "[Groupe Steam](https://steamcommunity.com/groups/bs-commu)\n[Chaîne Youtube](https://www.youtube.com/channel/UCA5SHN5LH3Z7_A7RpG3IYtw)"}
         )
@@ -37,7 +38,7 @@ async function handleSignUpButtonInteraction(interaction) {
 
 async function checkLastSignUpMessage(client) {
     try {
-        const channelId = channels.inscriptionmessage;
+        const channelId = channels.inscriptionMessage;
         const channel = client.channels.cache.get(channelId);
 
 
