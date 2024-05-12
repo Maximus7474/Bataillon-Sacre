@@ -52,7 +52,7 @@ async function checkLastSignUpMessage(client) {
             await clientMessage.edit({ embeds: [embed], components: components });
         }
     } catch (error) {
-        console.error("Error:", error);
+        console.error("Caught Error:", error);
     }
 }
 
