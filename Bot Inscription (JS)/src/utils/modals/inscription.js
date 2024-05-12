@@ -69,7 +69,7 @@ async function inscriptionModalHandler (client, interaction) {
         .setAuthor({ name: interaction.guild.name, iconURL: interaction.guild.iconURL({ format: 'png', size: 64 }) })
         .setImage(interaction.guild.bannerURL({ format: 'png', size: 96 }));
 
-    const channelID = channels.inscriptionlog;
+    const channelID = channels.inscriptionLog;
     const channel = await client.channels.cache.get(channelID);
 
     if (channel) {
@@ -89,7 +89,7 @@ async function inscriptionModalHandler (client, interaction) {
             ephemeral :true
         })
     } else {
-        console.error("Channel was not found:", channels.inscriptionlog, channel)
+        console.error("Channel was not found:", channels.inscriptionLog, channel)
     }
 };
 
