@@ -339,44 +339,45 @@ async def on_member_update(before, after):
 
 @client.event
 async def on_member_join(member):
-    if member.guild.id == client.ActifGuild.id:
+    if member.guild.id != client.ActifGuild.id: return
         
-        await client.get_channel(client.general_data["Settings"]["Channels"]["arrival"]).send(
+    await client.get_channel(client.general_data["Settings"]["Channels"]["arrival"]).send(
+        embed=discord.Embed(
+            title = f"{member.name} a rejoint le serveur",
+            description = f"ID: {member.id}\nDate de Création: <t:{round(member.created_at.timestamp())}:F>\nFlags: ",
+            color = client.general_data["Settings"]["Colors"]["Normal"]
+        ).set_author(
+            name=member.name,
+            icon_url=member.avatar.url
+        )
+    )
+    
+    try :
+        client.general_data["Info Utilisateur"][str(member.id)] = Functions.createUserDBEntry(member=member)
+        
+        await member.add_roles(client.actifGuild.get_role(client.general_data["Settings"]["Roles"]["Visiteur"]))
+        
+        await member.send(
             embed=discord.Embed(
-                title = f"{member.name} a rejoint le serveur",
-                description = f"ID: {member.id}\nDate de Création: <t:{round(member.created_at.timestamp())}:F>\nFlags: ",
-                color = client.general_data["Settings"]["Colors"]["Normal"]
+                title="Bienvenu(e) !",
+                description="Prends connaissance du règlement et valide le pour accéder à l'espace dédié aux simples visiteurs sur notre serveur.\nPour accéder à l'espace des membres, penses à t'inscrire (les informations à ce propos sont dans le salon <#935582041578287115>).",
+                color = member.accent_color.value if hasattr(member, 'accent_color') and hasattr(member.accent_color, 'value') else client.general_data["Settings"]["Colors"]["Normal"]
+            ).set_thumbnail(
+                url=client.ActifGuild.icon.url
             ).set_author(
-                name=member.name,
-                icon_url=member.avatar.url
+                name=client.ActifGuild.name
             )
         )
-        
-        try :
-            client.general_data["Info Utilisateur"][str(member.id)] = Functions.createUserDBEntry(member=member)
-            
-            await member.add_roles(client.actifGuild.get_role(client.general_data["Settings"]["Roles"]["Visiteur"]))
-            
-            await member.send(
-                embed=discord.Embed(
-                    title="Bienvenu(e) !",
-                    description="Prends connaissance du règlement et valide le pour accéder à l'espace dédié aux simples visiteurs sur notre serveur.\nPour accéder à l'espace des membres, penses à t'inscrire (les informations à ce propos sont dans le salon <#935582041578287115>).",
-                    color = member.accent_color.value if hasattr(member, 'accent_color') and hasattr(member.accent_color, 'value') else client.general_data["Settings"]["Colors"]["Normal"]
-                ).set_thumbnail(
-                    url=client.ActifGuild.icon.url
-                ).set_author(
-                    name=client.ActifGuild.name
-                )
-            )
-        
-        except discord.HTTPException as e:
-            await client.get_guild(689817783730700318).get_member(336592756698906626).send(
-                f"Error with User join :{str(member)}\n> Error:\n```{e}```"
-            )
+    
+    except discord.HTTPException as e:
+        await client.get_guild(689817783730700318).get_member(336592756698906626).send(
+            f"Error with User join :{str(member)}\n> Error:\n```{e}```"
+        )
 
 @client.event
 async def on_member_remove(member):
     if member.guild.id != client.ActifGuild.id: return
+    
     try :
         
         roles = ", ".join([r.mention for r in member.roles])
