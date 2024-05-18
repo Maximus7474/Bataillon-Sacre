@@ -376,7 +376,7 @@ async def on_member_join(member):
 
 @client.event
 async def on_member_remove(member):
-    if member.guild.id == client.ActifGuild.id: return
+    if member.guild.id != client.ActifGuild.id: return
     try :
         
         roles = ", ".join([r.mention for r in member.roles])
@@ -407,6 +407,7 @@ async def on_member_update(before, after):
 
 @client.event
 async def on_voice_state_update(member,before,after):
+    if member.guild.id != client.ActifGuild.id: return
     if after.channel is not None and after.channel.id in client.general_data["Settings"]["Channels"]["createvoice"] :
         if before.channel is not None and before.channel.id in client.temporary_channels and before.channel.members==[]:
             await before.channel.delete()
