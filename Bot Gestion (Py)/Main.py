@@ -383,7 +383,7 @@ async def on_member_remove(member):
         await client.get_channel(client.general_data["Settings"]["Channels"]["departure"]).send(
             embed=discord.Embed(
                 title = f"{member.name} à quitté le serveur",
-                description = f"Nom d'affichage: {member.display_name}\nJour d'arrivée: <t:{round(member.joined_at().timestamp)}:d>\nRoles:\n>>> {roles}",
+                description = f"Nom d'affichage: {member.display_name}\nJour d'arrivée: <t:{round(member.joined_at.timestamp)}:d>\nRoles:\n>>> {roles}",
                 color = client.general_data["Settings"]["Colors"]["Normal"]
             ).set_author(
                 name=member.name,
