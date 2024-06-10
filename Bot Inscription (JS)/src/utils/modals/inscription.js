@@ -26,20 +26,20 @@ const emailInput = new TextInputBuilder()
 const identifierInput = new TextInputBuilder()
     .setLabel('Vos identifiants de jeu, format a respecté')
     .setCustomId('identifierInput')
-    .setPlaceholder('(Optionnel)\nsteam:789123456\nhttps://steamcommunity.com/id/iweester/\nepic:123546789')
+    .setPlaceholder('(Optionnel)\nsteam:789123456\nhttps://steamcommunity.com/id/iweester/\nepic:123546789\nAutres identifiants')
     .setRequired(true)
     .setStyle(TextInputStyle.Paragraph);
 
-const languageInput = new TextInputBuilder()
-    .setLabel('Parlez vous le français?')
-    .setCustomId('languageInput')
+const rulesInput = new TextInputBuilder()
+    .setLabel('Approuvez-vous le règlement?')
+    .setCustomId('rulesInput')
     .setPlaceholder('Oui / Non')
     .setRequired(true)
     .setStyle(TextInputStyle.Short);
 
 const firstActionRow = new ActionRowBuilder().addComponents(emailInput);
 const secondActionRow = new ActionRowBuilder().addComponents(identifierInput);
-const thirdActionRow = new ActionRowBuilder().addComponents(languageInput);
+const thirdActionRow = new ActionRowBuilder().addComponents(rulesInput);
 
 inscriptionModal.addComponents(firstActionRow, secondActionRow, thirdActionRow);
 
@@ -48,7 +48,7 @@ async function inscriptionModalHandler (client, interaction) {
 
 	const email = interaction.fields.getTextInputValue('emailInput');
 	const identifiers = cleanStringToList(interaction.fields.getTextInputValue('identifierInput'));
-    const language = interaction.fields.getTextInputValue('languageInput');
+    const language = interaction.fields.getTextInputValue('rulesInput');
 
     const username = interaction.user.username;
     const discordID = interaction.user.id;
