@@ -1,4 +1,6 @@
 const { ActionRowBuilder, ButtonBuilder, EmbedBuilder, ButtonStyle } = require('discord.js');
+const log = new require('../../logger.js')
+const logger = new log("MessageRules")
 
 const { channels, roles, colors } = require('../../../config.json');
 
@@ -89,6 +91,9 @@ async function handleRulesButtonInteraction(interaction) {
 async function checkLastRulesMessage(client) {
     try {
         const channelId = channels.rules;
+        if (channelId === undefined || channelId === null) {
+            return
+        }
         const channel = client.channels.cache.get(channelId);
 
         const messages = await channel.messages.fetch({ limit: 5 });
@@ -101,7 +106,7 @@ async function checkLastRulesMessage(client) {
             await clientMessage.edit({ embeds: [embed], components: components });
         }
     } catch (error) {
-        console.error("Caught Error:", error);
+        console.error(`checkLastRulesMessage(${channels.rules})`,"Caught Error:", error);
     }
 }
 
