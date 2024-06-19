@@ -96,6 +96,8 @@ async function checkLastRulesMessage(client) {
         }
         const channel = client.channels.cache.get(channelId);
 
+        if (!channel) return logger.warn('No Channel Specified for Rules.');
+
         const messages = await channel.messages.fetch({ limit: 5 });
         const clientMessage = messages.find(msg => msg.author.id === channel.client.user.id);
 
