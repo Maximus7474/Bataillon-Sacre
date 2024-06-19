@@ -23,11 +23,11 @@ const emailInput = new TextInputBuilder()
     .setCustomId('emailInput')
     .setPlaceholder('email@email.com')
     .setRequired(true)
-    .setLabel("Quel est votre email?")
+    .setLabel("Adresse email : ")
     .setStyle(TextInputStyle.Short);
 
 const identifierInput = new TextInputBuilder()
-    .setLabel('Vos identifiants de jeu, format a respecté')
+    .setLabel('Identifiants (Steam, Epicgames, …) :')
     .setCustomId('identifierInput')
     .setPlaceholder('(Optionnel)\nsteam:789123456\nhttps://steamcommunity.com/id/iweester/\nepic:123546789\nOu autres')
     .setRequired(true)
@@ -75,7 +75,7 @@ async function inscriptionModalHandler (client, interaction) {
                 .setStyle('Success'),
             new ButtonBuilder()
                 .setCustomId('signupCancel')
-                .setLabel('Annuler')
+                .setLabel('Refuser')
                 .setStyle('Danger')
         );
     
