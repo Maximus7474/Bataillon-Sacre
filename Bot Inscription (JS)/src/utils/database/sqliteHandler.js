@@ -1,3 +1,6 @@
+const log = new require('../logger.js')
+const logger = new log("sqlite3") 
+
 const sqlite3 = require('sqlite3').verbose();
 
 // Function to initialize the database
@@ -7,14 +10,14 @@ const initializeDatabase = () => {
         db.run(`CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT,
-            discord_id TEXT,
+            discord_id TEXT UNIQUE,
             signup_date INTEGER DEFAULT (strftime('%s', 'now')),
             joined_date INTEGER,
             email TEXT,
             game_identifiers TEXT,
-            parle_fr TEXT
+            reglement TEXT
         );`);
-        console.log('Database initialized.');
+        logger.info('Database initialized.');
     });
     // Close the database connection
     db.close();
@@ -26,10 +29,10 @@ const executeStatement = (sql, params = []) => {
         const db = new sqlite3.Database(`./data.db`);
         db.run(sql, params, function (err) {
             if (err) {
-                console.error('Error executing SQL statement:', err);
+                logger.error('- Error executing SQL statement:', `(${sql}) - [${JSON.stringify(params)}]`, err);
                 reject(err);
             } else {
-                console.log('SQL statement executed successfully.');
+                logger.info('SQL statement executed successfully.');
                 resolve(this.lastID || this.changes);
             }
         });
@@ -46,7 +49,7 @@ const executeTransaction = (statements) => {
             statements.forEach(({ sql, params = [] }) => {
                 db.run(sql, params, function (err) {
                     if (err) {
-                        console.error('Error executing SQL statement:', err);
+                        logger.error('Error executing SQL statement:', `(${JSON.stringify(statements)})`, err);
                         db.run('ROLLBACK;');
                         reject(err);
                         return;
@@ -55,12 +58,12 @@ const executeTransaction = (statements) => {
             });
             db.run('COMMIT;', function (err) {
                 if (err) {
-                    console.error('Error committing transaction:', err);
+                    logger.error('Error committing transaction:', err);
                     db.run('ROLLBACK;');
                     reject(err);
                     return;
                 }
-                console.log('Transaction committed successfully.');
+                logger.info('Transaction committed successfully.');
                 resolve(true);
             });
         });
@@ -73,10 +76,10 @@ const executeQuery = (sql, params = []) => {
         const db = new sqlite3.Database(`./data.db`);
         db.get(sql, params, function (err, row) {
             if (err) {
-                console.error('Error executing SQL statement:', err);
+                logger.error('Error executing SQL statement:', `(${sql}) - [${JSON.stringify(params)}]`, err);
                 reject(err);
             } else {
-                console.log('SQL statement executed successfully.');
+                logger.info('SQL statement executed successfully.');
                 resolve(row); // Resolve with the single row
             }
         });
