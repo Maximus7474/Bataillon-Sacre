@@ -9,7 +9,11 @@ const { initializeDatabase } = require('./utils/database/sqliteHandler')
 const { checkLastSignUpMessage } = require('./utils/initialisation/messages/update_inscription')
 const { checkLastRulesMessage } = require('./utils/initialisation/messages/rules')
 
+const { compareAndUpdateConfigFiles } = require('./utils/checkConfig');
+
 assert(process.env.TOKEN, "A Discord Token for your bot is required ! Please go to your application page to get it! Set your token then as an enviormental variable with the TOKEN variable name!")
+
+compareAndUpdateConfigFiles();
 
 const client = new Discord.Client({
     intents: [
