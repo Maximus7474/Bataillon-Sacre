@@ -17,6 +17,7 @@ const client = new Discord.Client({
         Discord.GatewayIntentBits.GuildMessages,
         Discord.GatewayIntentBits.MessageContent,
         Discord.GatewayIntentBits.GuildMembers,
+        Discord.GatewayIntentBits.GuildVoiceStates
     ],
     partials: [
         Discord.Partials.Message,
@@ -32,6 +33,7 @@ const commands = find_commands(client)
 client.login(process.env.TOKEN)
 
 client.once(Discord.Events.ClientReady,(client)=>{
+    client.runtimeTemporaryData = {}
     register_commands(client,commands)
     initializeDatabase()
     checkLastSignUpMessage(client)
