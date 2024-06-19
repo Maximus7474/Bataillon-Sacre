@@ -1,6 +1,9 @@
-const { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, EmbedBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } = require('discord.js');
+const { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, EmbedBuilder, ButtonBuilder, MessageEmbed } = require('discord.js');
 const { channels, colors } = require('../../config.json');
-const { executeStatement } = require('../database/sqliteHandler');
+const { executeStatement, executeQuery } = require('../database/sqliteHandler');
+
+const log = require('../logger');
+const logger = new log('inscription');
 
 const cleanStringToList = (inputString) => {
     const stringArray = inputString.split('\n');
@@ -26,7 +29,7 @@ const emailInput = new TextInputBuilder()
 const identifierInput = new TextInputBuilder()
     .setLabel('Vos identifiants de jeu, format a respecté')
     .setCustomId('identifierInput')
-    .setPlaceholder('(Optionnel)\nsteam:789123456\nhttps://steamcommunity.com/id/iweester/\nepic:123546789\nAutres identifiants')
+    .setPlaceholder('(Optionnel)\nsteam:789123456\nhttps://steamcommunity.com/id/iweester/\nepic:123546789\nOu autres')
     .setRequired(true)
     .setStyle(TextInputStyle.Paragraph);
 
@@ -48,7 +51,7 @@ async function inscriptionModalHandler (client, interaction) {
 
 	const email = interaction.fields.getTextInputValue('emailInput');
 	const identifiers = cleanStringToList(interaction.fields.getTextInputValue('identifierInput'));
-    const language = interaction.fields.getTextInputValue('rulesInput');
+    const rules = interaction.fields.getTextInputValue('rulesInput');
 
     const username = interaction.user.username;
     const discordID = interaction.user.id;
@@ -60,10 +63,22 @@ async function inscriptionModalHandler (client, interaction) {
             `Inscription venant de: <@${discordID}> (${username})
             > - Email: \`${email}\`
             > - Identifiants:\n\`\`\`m\n${identifiers !== '[""]' ? "- " + JSON.parse(identifiers).join('\n- ') : "Aucun Partagé"}\n\`\`\`
-            > - Parle le français: ${language}`
+            > - Approuve le règlement: ${rules}`
         )
         .setColor(colors.base);
-
+    
+    const buttons = new ActionRowBuilder()
+        .addComponents(
+            new ButtonBuilder()
+                .setCustomId('signupValidate')
+                .setLabel('Valider')
+                .setStyle('Success'),
+            new ButtonBuilder()
+                .setCustomId('signupCancel')
+                .setLabel('Annuler')
+                .setStyle('Danger')
+        );
+    
     const responseEmbed = new EmbedBuilder()
         .setTitle('Inscription envoyée')
         .setAuthor({ name: interaction.guild.name, iconURL: interaction.guild.iconURL({ format: 'png', size: 64 }) })
@@ -73,24 +88,90 @@ async function inscriptionModalHandler (client, interaction) {
     const channel = await client.channels.cache.get(channelID);
 
     if (channel) {
-        channel.send({ embeds: [Embed] });
+        channel.send({ embeds: [Embed], components: [buttons] });
 
-        const insertUserSQL = `INSERT INTO users (username, discord_id, email, game_identifiers, parle_fr) VALUES (?, ?, ?, ?, ?)`;
-        executeStatement(insertUserSQL, [username, discordID, email, identifiers, language])
+        const result = await executeQuery('SELECT `id` FROM users WHERE discord_id = ?;', [discordID])
+
+        const sqlQuery = result === undefined ? 'INSERT INTO users (username, discord_id, email, game_identifiers, reglement) VALUES (?, ?, ?, ?, ?);' : "UPDATE users SET username = ?, email = ?, game_identifiers = ?, reglement = ?, signup_date = strftime('%s', 'now') WHERE discord_id = ?"
+        const sqlParams = result === undefined ? [username, discordID, email, identifiers, rules] : [username, email, identifiers, rules, discordID];
+    
+        executeStatement(sqlQuery, sqlParams)
             .then((result) => {
-                console.log('User inserted successfully with ID:', result);
+                logger.info('User inserted/updated successfully with ID:', result);
             })
             .catch((err) => {
-                console.error('Error inserting user:', err);
+                logger.error('Error inserting/updating user:', err || 'unknown', 'Request: ', sqlQuery, sqlParams);
             });
-
-        return interaction.reply({
+    
+        interaction.reply({
             embeds: [responseEmbed],
-            ephemeral :true
-        })
+            ephemeral: true
+        });
     } else {
-        console.error("Channel was not found:", channels.inscriptionLog, channel)
+        logger.error("Channel was not found:", channels.inscriptionLog, channel);
     }
 };
 
-module.exports = { inscriptionModal, inscriptionModalHandler };
+async function inscriptionValidationHandler (interaction) {
+    if (!interaction.isButton()) return;
+
+    if (interaction.customId === 'signupValidate' || interaction.customId === 'signupCancel') {
+
+        const { guild, channel, user } = interaction;
+        const discordID = user.id;
+
+        const Embed = EmbedBuilder.from(interaction.message.embeds[0]);
+
+        const discordIdRegex = /<@(\d+)>/;
+        const match = discordIdRegex.exec(interaction.message.embeds[0].description);
+        const targetDiscordID = match ? match[1] : null;
+
+        const currentTimestamp = Math.floor(Date.now() / 1000);
+        
+        let successfulNotify = false
+        
+        try {
+            const user = await interaction.client.users.fetch(targetDiscordID);
+            await user.send(interaction.customId === 'signupValidate' ? 'Votre inscription a été validée' : 'Votre inscription a été refusée');
+            successfulNotify = true;
+        } catch (err) {
+            logger.error(`Error sending DM to ${targetDiscordID}:`, err);
+        }
+
+        console.log('Current Embed', Embed.fields, Embed.footer, Embed);
+
+        Embed.addFields(interaction.customId === 'signupValidate' ? {
+                name: 'Validée par:', value: `> <@${discordID}> le <t:${currentTimestamp}>`
+            } : {
+                name: 'Annulée par:', value: `> <@${discordID}> le <t:${currentTimestamp}>`
+            })
+            .setFooter(interaction.customId === 'signupValidate' ? {
+                text: `Inscription validée. ${successfulNotify ? 'Joueur informé' : ':warning: Joueur pas informé'}`
+            } : {
+                text: `Inscription annulée. ${successfulNotify ? 'Joueur informé' : ':warning: Joueur pas informé'}`
+            });
+
+        console.log('New Embed', Embed.fields, Embed.footer);
+
+        await interaction.message.edit({ embeds: [Embed], components: [] })
+            .then(udpated => logger.info('Message updated', udpated.id, 'by:', discordID, 'for:', targetDiscordID))
+            .catch(err => logger.error('Impossible to update', targetDiscordID, 'error:', err));
+
+        if (interaction.customId === 'signupValidate') {
+
+            const updateSignupDateSQL = `
+                UPDATE users
+                SET signup_date = strftime('%s', 'now')
+                WHERE discord_id = ?
+            `;
+
+            executeStatement(updateSignupDateSQL, [targetDiscordID])
+                .then(response => logger.info('Updated', targetDiscordID, 'as joined', `(${response})`))
+                .catch(err => logger.error('Unable to update',targetDiscordID, err));
+        }
+    }
+}
+
+module.exports = {
+    inscriptionModal, inscriptionModalHandler, inscriptionValidationHandler
+};
