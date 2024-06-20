@@ -1,4 +1,6 @@
 const { ActionRowBuilder, ButtonBuilder, EmbedBuilder } = require('discord.js');
+const log = new require('../../logger.js')
+const logger = new log("SignupMessage")
 
 const { channels, colors } = require('../../../config.json');
 const { inscriptionModal } = require('../../modals/inscription');
@@ -41,6 +43,7 @@ async function checkLastSignUpMessage(client) {
         const channelId = channels.inscriptionMessage;
         const channel = client.channels.cache.get(channelId);
 
+        if (!channel) return logger.warn('No Channel Specified for Signup.');
 
         const messages = await channel.messages.fetch({ limit: 5 });
         const clientMessage = messages.find(msg => msg.author.id === channel.client.user.id);
