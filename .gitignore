@@ -9,3 +9,4 @@ Bot Gestion (Py)/__pycache__/
 *.db
 config.json
 Bot Inscription (JS)/src/config.json
+start.sh
