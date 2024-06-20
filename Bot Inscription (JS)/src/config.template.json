@@ -3,7 +3,7 @@
         "inscriptionLog": "channel_id",
         "inscriptionMessage": "channel_id",
         "rules": "channel_id",
-        "voiceCreate": "channel_id"
+        "voiceCreate": ["channel_id"]
     },
     "colors": {
         "base": "#0099ff",

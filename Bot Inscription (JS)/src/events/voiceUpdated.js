@@ -14,9 +14,9 @@ module.exports = {
 
         if (oldState.channelId === newState.channelId) return;
 
-        if (!client.runtimeTemporaryData.temporaryVoiceChannels) client.runtimeTemporaryData.temporaryVoiceChannels = ["1241476825318686730"];
+        if (!client.runtimeTemporaryData.temporaryVoiceChannels) client.runtimeTemporaryData.temporaryVoiceChannels = [];
 
-        if (newState.channelId === channels.voiceCreate) {
+        if (newState.channelId === channels.voiceCreate || channels.voiceCreate.includes(toString(newState.channelId))) {
             let newChannel
             try {
                 newChannel = await newState.channel.clone({
