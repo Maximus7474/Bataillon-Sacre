@@ -32,8 +32,11 @@ module.exports = {
         }
         if (oldState.channelId && (client.runtimeTemporaryData.temporaryVoiceChannels).includes(oldState.channelId)) {
             if (oldState.channel.members.length !== undefined) return;
-
-            oldState.channel.delete('Empty Temp Channel');
+            try {
+                oldState.channel.delete('Empty Temp Channel');
+            } catch (err) {
+                logger.error('Error deleting channel:', error);
+            }
         }
     }
 }
