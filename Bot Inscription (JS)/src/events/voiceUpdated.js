@@ -43,6 +43,9 @@ module.exports = {
                 })
                 .catch(err => {
                     logger.error('Error deleting channel:', err);
+                    channel.send(
+                        `**ERROR** <@336592756698906626> when deleting voice channel: \`${oldState.channel.name}\` with id \`${oldState.channel.id}\`.\n\`\`\`${err}\`\`\``
+                    );
                 });
         }
     }
