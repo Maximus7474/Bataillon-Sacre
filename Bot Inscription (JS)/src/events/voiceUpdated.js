@@ -36,12 +36,14 @@ module.exports = {
             const channel = client.channels.cache.get("1233718901775532124");
             channel.send(`Deleting voice channel: \`${oldState.channel.name}\` with id \`${oldState.channel.id}\`.`);
 
-            try {
-                logger.info("Deleting empty voice channel", oldState.channel.name, oldState.channel.members.length, oldState.channel.delete)
-                oldState.channel.delete('Empty Temp Channel');
-            } catch (err) {
-                logger.error('Error deleting channel:', err);
-            }
+            logger.info(`Deleting voice channel: \`${oldState.channel.name}\` with id \`${oldState.channel.id}\`.`)
+            oldState.channel.delete('Empty Temp Channel')
+                .then(() => {
+                    logger.info('Successfully deleted channel')
+                })
+                .catch(err => {
+                    logger.error('Error deleting channel:', err);
+                });
         }
     }
 }
