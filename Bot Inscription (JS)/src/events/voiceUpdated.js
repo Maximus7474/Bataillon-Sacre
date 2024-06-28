@@ -32,8 +32,8 @@ module.exports = {
         }
         if (oldState.channelId && (client.runtimeTemporaryData.temporaryVoiceChannels).includes(oldState.channelId)) {
             if (oldState.channel.members.length !== undefined) return;
-            logger.info('Trying to delete', oldState.channel);
             try {
+                logger.info("Deleting empty voice channel", oldState.channel.name, oldState.channel.members.length, oldState.channel.delete)
                 oldState.channel.delete('Empty Temp Channel');
             } catch (err) {
                 logger.error('Error deleting channel:', err);
