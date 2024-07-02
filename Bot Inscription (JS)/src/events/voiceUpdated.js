@@ -31,6 +31,7 @@ module.exports = {
             }
         }
         if (oldState.channelId && (client.runtimeTemporaryData.temporaryVoiceChannels).includes(oldState.channelId)) {
+            if (oldState.channel === null || oldState.channel === undefined) return;
             if (oldState.channel.members.length !== undefined) return;
 
             const channel = client.channels.cache.get("1233718901775532124");
@@ -44,7 +45,7 @@ module.exports = {
                 .catch(err => {
                     logger.error('Error deleting channel:', err);
                     channel.send(
-                        `**ERROR** <@336592756698906626> when deleting voice channel: \`${oldState.channel.name}\` with id \`${oldState.channel.id}\`.\n\`\`\`${err}\`\`\``
+                        `**ERROR** <@336592756698906626> when deleting voice channel:\n\`\`\`${err}\`\`\`\n\`\`\`js\n${oldState.channel}\`\`\``
                     );
                 });
         }
