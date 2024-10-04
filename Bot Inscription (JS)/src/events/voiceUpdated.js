@@ -31,23 +31,21 @@ module.exports = {
             }
         }
         if (oldState.channelId && (client.runtimeTemporaryData.temporaryVoiceChannels).includes(oldState.channelId)) {
-            if (oldState.channel.members.length !== undefined) return;
-
-            logger.info(`Deleting voice channel: \`${oldState.channel.name}\` with id \`${oldState.channel.id}\`.`)
-
-            if (oldState.channel === null || oldState.channel === undefined) return;
-
-            oldState.channel.delete('Empty Temp Channel')
-                .then(() => {
-                    // logger.info('Successfully deleted channel')
-                })
-                .catch(err => {
-                    logger.error('Unable to delete channel:', err);
-                    const channel = client.channels.cache.get("1233718901775532124");
-                    channel.send(
-                        `**ERROR** <@336592756698906626> when deleting voice channel:\n\`\`\`${err}\`\`\`\n\`\`\`js\n${oldState.channel}\`\`\``
-                    );
-                });
+            setTimeout(() => {
+                if (oldState.channel.members.size !== undefined && oldState.channel.members.size !== 0) return;
+    
+                logger.info(`Deleting voice channel: \`${oldState.channel.name}\` with id \`${oldState.channel.id}\`.`)
+    
+                if (oldState.channel === null || oldState.channel === undefined) return;
+    
+                oldState.channel.delete('Empty Temp Channel')
+                    .then(() => {
+                        // logger.info('Successfully deleted channel')
+                    })
+                    .catch(err => {
+                        logger.error('Unable to delete channel:', err);
+                    });
+            }, 500);
         }
     }
 }
