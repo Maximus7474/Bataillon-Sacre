@@ -2,7 +2,7 @@ const { ActionRowBuilder, ButtonBuilder, EmbedBuilder, ButtonStyle } = require('
 const log = new require('../../logger.js')
 const logger = new log("MessageRules")
 
-const { channels, roles, colors } = require('../../../../config.json');
+const { channels, roles, colors } = require('../../../config.json');
 
 const buttonID = 'acceptRules';
 

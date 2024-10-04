@@ -2,7 +2,7 @@ const { ActionRowBuilder, ButtonBuilder, EmbedBuilder } = require('discord.js');
 const log = new require('../../logger.js')
 const logger = new log("SignupMessage")
 
-const { channels, colors } = require('../../../../config.json');
+const { channels, colors } = require('../../../config.json');
 const { inscriptionModal } = require('../../modals/inscription');
 
 const buttonID = 'ouvrirInscription';
