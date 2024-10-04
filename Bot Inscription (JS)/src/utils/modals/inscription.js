@@ -1,5 +1,5 @@
 const { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, EmbedBuilder, ButtonBuilder, MessageEmbed } = require('discord.js');
-const { channels, colors } = require('../../config.json');
+const { channels, colors } = require('../../../config.json');
 const { executeStatement, executeQuery } = require('../database/sqliteHandler');
 
 const log = require('../logger');

@@ -1,0 +1,7 @@
+{
+  "apps": [{
+	  "name": "Bataillon Sacre©Inscription",
+	  "script": "npm run start",
+	  "cwd": "/home/ubuntu/DiscordBots/iWeester/Bataillon-Sacre/Bot Inscription (JS)"
+  }]
+}
