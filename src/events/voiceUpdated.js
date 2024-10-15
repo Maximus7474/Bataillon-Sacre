@@ -45,7 +45,7 @@ module.exports = {
                     .catch(err => {
                         logger.error('Unable to delete channel:', err);
                     });
-            }, 500);
+            }, 50);
         }
     }
 }
