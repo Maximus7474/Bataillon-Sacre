@@ -4,6 +4,9 @@
     "description": "Bot de gestion d'inscription du bataillon sacré",
     "main": "src/main.js",
     "scripts": {
+        "test": "mocha 'test/*.js'",
+        "test-lint": "mocha 'test/lint-test.js'",
+        "lint": "eslint src/**/*.js",
         "start": "node src/main.js",
         "deploy": "node deployment/register_commands.js"
     },
