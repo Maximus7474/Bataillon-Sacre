@@ -9,20 +9,18 @@ module.exports = (client) => {
     for (const element of events) {
         const element_loaded = require(path_to_events + element)
         if (!element_loaded.type) { logger.error(`Failed to load ${element} type`);continue}
-        if (!element_loaded.call && !element_loaded.execute) { logger.error(`Failed to load ${element} call/execute`);continue}
+        if (!element_loaded.call) { logger.error(`Failed to load ${element} call`);continue}
         switch (element_loaded.type) {
             case "on":
                 {
                     logger.success(`Successfully loaded ${element} event`)
-                    if (element_loaded.call) client.on(element_loaded.event, (...args) => element_loaded.call(client,...args));
-                    if (element_loaded.execute) client.on(element_loaded.event, (...args) => element_loaded.execute(client,...args));
+                    client.on(element_loaded.event, (...args) => element_loaded.call(client,...args));
                     break;
                 }
             case "once":
                 {
                     logger.success(`Successfully loaded ${element} event`)
-                    if (element_loaded.call) client.once(element_loaded.event, (...args) => element_loaded.call(client,...args));
-                    if (element_loaded.execute) client.once(element_loaded.event, (...args) => element_loaded.execute(client,...args));
+                    client.once(element_loaded.event, (...args) => element_loaded.call(client,...args));
                     break;
                 }
             default:
