@@ -1,38 +1,51 @@
-const log = new require('../logger.js')
-const logger = new log("sqlite3") 
-
 const sqlite3 = require('sqlite3').verbose();
+const fs = require('fs');
 
-// Function to initialize the database
+const log = new require('../logger.js')
+const logger = new log("sqlite")
+
+let initialized = false;
+
 const initializeDatabase = () => {
     const db = new sqlite3.Database(`./data.db`);
+    
+    const sqlScript = fs.readFileSync('./src/utils/database/base.sql', 'utf8');
     db.serialize(() => {
-        db.run(`CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT,
-            discord_id TEXT UNIQUE,
-            signup_date INTEGER DEFAULT (strftime('%s', 'now')),
-            joined_date INTEGER,
-            email TEXT,
-            game_identifiers TEXT,
-            reglement TEXT
-        );`);
-        logger.info('Database initialized.');
+        db.exec(sqlScript, function(err) {
+            if (err) {
+                logger.error('Error initializing database:', err.message);
+            } else {
+                initialized = true;
+                logger.info('Database initialized.');
+            }
+        });
     });
-    // Close the database connection
+
     db.close();
 };
 
-// Function to execute a single SQL statement
-const executeStatement = (sql, params = []) => {
+const waitForInitialization = () => {
+    return new Promise((resolve) => {
+        const checkInterval = setInterval(() => {
+            if (initialized) {
+                clearInterval(checkInterval);
+                resolve();
+            }
+        }, 100);
+    });
+};
+
+const executeStatement = async (sql, params = []) => {
+    if (!initialized) await waitForInitialization();
+    
     return new Promise((resolve, reject) => {
         const db = new sqlite3.Database(`./data.db`);
         db.run(sql, params, function (err) {
             if (err) {
-                logger.error('- Error executing SQL statement:', `(${sql}) - [${JSON.stringify(params)}]`, err);
+                logger.error('Error executing SQL statement:', err);
                 reject(err);
             } else {
-                logger.info('SQL statement executed successfully.');
+                logger.success('SQL statement executed successfully.');
                 resolve(this.lastID || this.changes);
             }
         });
@@ -40,8 +53,9 @@ const executeStatement = (sql, params = []) => {
     });
 };
 
-// Function to execute multiple SQL statements in a transaction
-const executeTransaction = (statements) => {
+const executeTransaction = async (statements) => {
+    if (!initialized) await waitForInitialization();
+
     return new Promise((resolve, reject) => {
         const db = new sqlite3.Database(`./data.db`);
         db.serialize(() => {
@@ -49,7 +63,7 @@ const executeTransaction = (statements) => {
             statements.forEach(({ sql, params = [] }) => {
                 db.run(sql, params, function (err) {
                     if (err) {
-                        logger.error('Error executing SQL statement:', `(${JSON.stringify(statements)})`, err);
+                        logger.error('Error executing SQL statement:', err);
                         db.run('ROLLBACK;');
                         reject(err);
                         return;
@@ -63,7 +77,7 @@ const executeTransaction = (statements) => {
                     reject(err);
                     return;
                 }
-                logger.info('Transaction committed successfully.');
+                logger.success('Transaction committed successfully.');
                 resolve(true);
             });
         });
@@ -71,16 +85,19 @@ const executeTransaction = (statements) => {
     });
 };
 
-const executeQuery = (sql, params = []) => {
+const executeQuery = async (sql, params = [], type = 'get') => {
+    if (!initialized) await waitForInitialization();
+
+    if (type !== 'get' && type !== 'all') return logger.warn('Incorrect argument for executeQuery type argument');
     return new Promise((resolve, reject) => {
         const db = new sqlite3.Database(`./data.db`);
-        db.get(sql, params, function (err, row) {
+        db[type](sql, params, function (err, row) {
             if (err) {
-                logger.error('Error executing SQL statement:', `(${sql}) - [${JSON.stringify(params)}]`, err);
+                logger.error('Error executing SQL statement:', err);
                 reject(err);
             } else {
-                logger.info('SQL statement executed successfully.');
-                resolve(row); // Resolve with the single row
+                logger.success('SQL statement executed successfully.');
+                resolve(row);
             }
         });
         db.close();
