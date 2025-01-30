@@ -1,9 +1,44 @@
-const Discord = require("discord.js")
+const fs = require('fs');
+const path = require('path');
 
 const { channels, text } = require('../config.json');
 
-const log = new require('../utils/logger.js')
-const logger = new log("Voice State")
+const log = new require('../utils/logger.js');
+const logger = new log("Voice State");
+
+let storageFile = path.join(__dirname, '../temporaryVoiceChannels.json')
+let temporaryVoiceChannels = [];
+
+if (fs.existsSync(storageFile)) {
+    try {
+        const data = fs.readFileSync(storageFile, 'utf-8');
+        temporaryVoiceChannels = JSON.parse(data);
+        logger.success('Temporary voice channels loaded:', temporaryVoiceChannels);
+    } catch (err) {
+        logger.error('Error loading temporary voice channels:', err.message);
+    }
+} else {
+    logger.info('Storage file not found. Starting with an empty list.');
+}
+
+const saveTemporaryData = () => {
+    try {
+        fs.writeFileSync(storageFile, JSON.stringify(temporaryVoiceChannels, null, 2), 'utf-8');
+        logger.success('Temporary voice channels saved.');
+    } catch (err) {
+        logger.error('Error saving temporary voice channels:', err);
+    }
+};
+
+const removeChannel = (id) => {
+    const index = temporaryVoiceChannels.indexOf(id);
+    if (index !== -1) {
+        temporaryVoiceChannels.splice(index, 1);
+        saveTemporaryData();
+    } else {
+        logger.warn(`Value ${id} not found in temporaryVoiceChannels.`);
+    }
+};
 
 module.exports = {
     event: 'voiceStateUpdate',
@@ -14,7 +49,7 @@ module.exports = {
 
         if (oldState.channelId === newState.channelId) return;
 
-        if (!client.runtimeTemporaryData.temporaryVoiceChannels) client.runtimeTemporaryData.temporaryVoiceChannels = [];
+        if (!temporaryVoiceChannels) temporaryVoiceChannels = [];
 
         if (newState.channelId === channels.voiceCreate || channels.voiceCreate.includes(toString(newState.channelId))) {
             let newChannel
@@ -25,22 +60,26 @@ module.exports = {
                 
                 await newState.member.voice.setChannel(newChannel);
 
-                client.runtimeTemporaryData.temporaryVoiceChannels.push(newChannel.id)
+                temporaryVoiceChannels.push(newChannel.id);
+                saveTemporaryData();
             } catch (error) {
                 logger.error('Error cloning channel:', error);
             }
         }
-        if (oldState.channelId && (client.runtimeTemporaryData.temporaryVoiceChannels).includes(oldState.channelId)) {
+        if (oldState.channelId && (temporaryVoiceChannels).includes(oldState.channelId)) {
             setTimeout(() => {
                 if (oldState.channel.members.size !== undefined && oldState.channel.members.size !== 0) return;
     
                 logger.info(`Deleting voice channel: \`${oldState.channel.name}\` with id \`${oldState.channel.id}\`.`)
     
                 if (oldState.channel === null || oldState.channel === undefined) return;
+
+                const { channel } = oldState;
     
-                oldState.channel.delete('Empty Temp Channel')
+                oldState.channel.delete('Empty Temporary Channel')
                     .then(() => {
-                        // logger.info('Successfully deleted channel')
+                        logger.info('Successfully deleted channel', channel.name, channel.id);
+                        removeChannel(channel.id);
                     })
                     .catch(err => {
                         logger.error('Unable to delete channel:', err);

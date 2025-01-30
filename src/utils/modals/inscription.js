@@ -1,4 +1,4 @@
-const { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, EmbedBuilder, ButtonBuilder, MessageEmbed } = require('discord.js');
+const { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, EmbedBuilder, ButtonBuilder } = require('discord.js');
 const { channels, colors } = require('../../config.json');
 const { executeStatement, executeQuery } = require('../database/sqliteHandler');
 
@@ -117,7 +117,7 @@ async function inscriptionValidationHandler (interaction) {
 
     if (interaction.customId === 'signupValidate' || interaction.customId === 'signupCancel') {
 
-        const { guild, channel, user } = interaction;
+        const { user } = interaction;
         const discordID = user.id;
 
         const Embed = EmbedBuilder.from(interaction.message.embeds[0]);
