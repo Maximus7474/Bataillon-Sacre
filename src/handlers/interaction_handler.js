@@ -1,4 +1,5 @@
 const { GetInteractionHandlersForStaticMessages } = require('../utils/initialisation/setup_staticMessages');
+const { checkSignupInteractionID, handleSignupResponse } = require('./custom/signup_handler');
 
 const log = new require('../utils/logger.js');
 const logger = new log("Interaction Handler");
@@ -13,4 +14,8 @@ module.exports = async (client,interaction) => {
         
         return await callbacks[customId](client, interaction);
     }
-}
+
+    if (checkSignupInteractionID(customId)) return handleSignupResponse(client, interaction);
+
+    logger.warn('Unable to handle an interaction:', customId);
+};
