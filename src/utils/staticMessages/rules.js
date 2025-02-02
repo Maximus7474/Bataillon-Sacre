@@ -1,8 +1,8 @@
 const { ActionRowBuilder, ButtonBuilder, EmbedBuilder, ButtonStyle } = require('discord.js');
-const log = new require('../../logger.js')
+const log = new require('../logger.js')
 const logger = new log("MessageRules")
 
-const { channels, roles, colors } = require('../../../config.json');
+const { channels, roles, colors } = require('../../config.json');
 
 const buttonID = 'acceptRules';
 
@@ -63,11 +63,37 @@ function createRulesEmbedWithButton() {
     return { embed, components: [row] };
 }
 
-
-async function handleRulesButtonInteraction(interaction) {
-    if (!interaction.isButton()) return;
-
-    if (interaction.customId === buttonID) {
+module.exports = {
+    /* Can also by a simple string */
+    customId: [buttonID],
+    /* Setup function that is run on client start */
+    async setup (client) {
+        try {
+            const channelId = channels.rules;
+            if (channelId === undefined || channelId === null) {
+                return
+            }
+            const channel = client.channels.cache.get(channelId);
+    
+            if (!channel) return logger.warn('No Channel Specified for Rules.');
+    
+            const messages = await channel.messages.fetch({ limit: 5 });
+            const clientMessage = messages.find(msg => msg.author.id === channel.client.user.id);
+    
+            const { embed, components } = createRulesEmbedWithButton();
+            if (!clientMessage) {
+                await channel.send({ embeds: [embed], components: components });
+            } else {
+                await clientMessage.edit({ embeds: [embed], components: components });
+            }
+        } catch (error) {
+            console.error(`checkLastRulesMessage(${channels.rules})`,"Caught Error:", error);
+        }
+    },
+    /* The function called for any interactions created using the specified customId */
+    async callback (client, interaction) {
+        if (!interaction.isButton()) return;
+    
         const guild  = interaction.guild;
         const member = interaction.member;
 
@@ -87,29 +113,3 @@ async function handleRulesButtonInteraction(interaction) {
         })
     }
 }
-
-async function checkLastRulesMessage(client) {
-    try {
-        const channelId = channels.rules;
-        if (channelId === undefined || channelId === null) {
-            return
-        }
-        const channel = client.channels.cache.get(channelId);
-
-        if (!channel) return logger.warn('No Channel Specified for Rules.');
-
-        const messages = await channel.messages.fetch({ limit: 5 });
-        const clientMessage = messages.find(msg => msg.author.id === channel.client.user.id);
-
-        const { embed, components } = createRulesEmbedWithButton();
-        if (!clientMessage) {
-            await channel.send({ embeds: [embed], components: components });
-        } else {
-            await clientMessage.edit({ embeds: [embed], components: components });
-        }
-    } catch (error) {
-        console.error(`checkLastRulesMessage(${channels.rules})`,"Caught Error:", error);
-    }
-}
-
-module.exports = { createRulesEmbedWithButton, handleRulesButtonInteraction, checkLastRulesMessage };

@@ -11,6 +11,12 @@
         "admin": "#ffd800",
         "error": "#0099ff"
     },
+    "roles": {
+      "validatedRules": [
+        "role_id",
+        "role_id"
+      ]
+    },
     "text": {
         "voiceCreate": "🔊┊ channel_name"
     }
