@@ -1,23 +1,25 @@
 {
-    "channels": {
-        "inscriptionLog": "channel_id",
-        "inscriptionMessage": "channel_id",
-        "rules": "channel_id",
-        "voiceCreate": ["channel_id"]
-    },
-    "colors": {
-        "base": "#0099ff",
-        "success": "#0099ff",
-        "admin": "#ffd800",
-        "error": "#0099ff"
-    },
-    "roles": {
-      "validatedRules": [
-        "role_id",
-        "role_id"
-      ]
-    },
-    "text": {
-        "voiceCreate": "🔊┊ channel_name"
-    }
+  "channels": {
+    "inscriptionLog": "channel_id",
+    "inscriptionMessage": "channel_id",
+    "rules": "channel_id",
+    "voiceCreate": [
+      "channel_id"
+    ]
+  },
+  "colors": {
+    "base": "#0099ff",
+    "success": "#0099ff",
+    "admin": "#ffd800",
+    "error": "#0099ff"
+  },
+  "roles": {
+    "validatedRules": [
+      "role_id",
+      "role_id"
+    ]
+  },
+  "text": {
+    "voiceCreate": "🔊┊ channel_name"
+  }
 }
