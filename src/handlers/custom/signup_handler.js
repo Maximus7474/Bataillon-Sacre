@@ -40,7 +40,7 @@ const handleSignupResponse = async (client, interaction) => {
             informed = false;
         }
 
-        for (const roleId of roles.validatedRules) {
+        for (const roleId of roles.membre) {
             const role = guild.roles.cache.get(roleId);
             if (role) {
                 await member.roles.add(role);

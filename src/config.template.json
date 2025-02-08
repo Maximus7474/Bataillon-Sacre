@@ -14,7 +14,7 @@
     "error": "#0099ff"
   },
   "roles": {
-    "validatedRules": [
+    "membre": [
       "role_id",
       "role_id"
     ]
