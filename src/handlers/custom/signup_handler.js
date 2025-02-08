@@ -40,17 +40,19 @@ const handleSignupResponse = async (client, interaction) => {
             informed = false;
         }
 
-        for (const roleId of roles.membre) {
-            const role = guild.roles.cache.get(roleId);
-            if (role) {
-                await member.roles.add(role);
+        if (action === "accept_signup") {
+            for (const roleId of roles.membre) {
+                const role = guild.roles.cache.get(roleId);
+                if (role) {
+                    await member.roles.add(role);
+                }
             }
-        }
-
-        for (const roleId of roles.visiteur) {
-            const role = guild.roles.cache.get(roleId);
-            if (role) {
-                await member.roles.remove(role);
+    
+            for (const roleId of roles.visiteur) {
+                const role = guild.roles.cache.get(roleId);
+                if (role) {
+                    await member.roles.remove(role);
+                }
             }
         }
 
