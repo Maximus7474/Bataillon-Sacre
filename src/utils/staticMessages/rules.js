@@ -1,10 +1,8 @@
-const { ActionRowBuilder, ButtonBuilder, EmbedBuilder, ButtonStyle } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const log = new require('../logger.js')
 const logger = new log("MessageRules")
 
-const { channels, roles, colors } = require('../../config.json');
-
-const buttonID = 'acceptRules';
+const { channels, colors } = require('../../config.json');
 
 function createRulesEmbedWithButton() {
     const embed = new EmbedBuilder()
@@ -51,21 +49,12 @@ function createRulesEmbedWithButton() {
         )
         .setThumbnail("https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Emblem_of_La_Francophonie.svg/1034px-Emblem_of_La_Francophonie.svg.png");
 
-    const button = new ButtonBuilder()
-        .setCustomId(buttonID)
-        .setLabel('Valider')
-        .setStyle(ButtonStyle.Success)
-        .setEmoji('✅');
-
-    const row = new ActionRowBuilder()
-        .addComponents(button);
-
-    return { embed, components: [row] };
+    return embed;
 }
 
 module.exports = {
     /* Can also by a simple string */
-    customId: [buttonID],
+    customId: [],
     /* Setup function that is run on client start */
     async setup (client) {
         try {
@@ -80,36 +69,16 @@ module.exports = {
             const messages = await channel.messages.fetch({ limit: 5 });
             const clientMessage = messages.find(msg => msg.author.id === channel.client.user.id);
     
-            const { embed, components } = createRulesEmbedWithButton();
+            const embed = createRulesEmbedWithButton();
             if (!clientMessage) {
-                await channel.send({ embeds: [embed], components: components });
+                await channel.send({ embeds: [embed] });
             } else {
-                await clientMessage.edit({ embeds: [embed], components: components });
+                await clientMessage.edit({ embeds: [embed] });
             }
         } catch (error) {
-            console.error(`checkLastRulesMessage(${channels.rules})`,"Caught Error:", error);
+            logger.error(`checkLastRulesMessage(${channels.rules})`,"Caught Error:", error);
         }
     },
     /* The function called for any interactions created using the specified customId */
-    async callback (client, interaction) {
-        if (!interaction.isButton()) return;
-    
-        const guild  = interaction.guild;
-        const member = interaction.member;
-
-        let added = 0;
-        (roles.validatedRules).forEach(element => {
-            var newRole = guild.roles.cache.get(element);
-
-            if (newRole && !member.roles.cache.some(role => role.name === newRole.name)) {
-                member.roles.add(newRole);
-                added += 1;
-            };
-        });
-
-        await interaction.reply({
-            content: added > 0 ? 'Règlement accepté, vous avez maintenant accès à notre espace visiteur.' : 'Règlement déjà accepté',
-            ephemeral: true
-        })
-    }
+    async callback (client, interaction) {}
 }
