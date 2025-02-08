@@ -17,6 +17,9 @@
     "membre": [
       "role_id",
       "role_id"
+    ],
+    "visiteur": [
+      "role_id"
     ]
   },
   "text": {

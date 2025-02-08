@@ -47,6 +47,13 @@ const handleSignupResponse = async (client, interaction) => {
             }
         }
 
+        for (const roleId of roles.visiteur) {
+            const role = guild.roles.cache.get(roleId);
+            if (role) {
+                await member.roles.remove(role);
+            }
+        }
+
         const message = await interaction.message.fetch();
 
         const updatedEmbed = EmbedBuilder.from(message.embeds[0])
