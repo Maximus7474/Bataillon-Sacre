@@ -30,7 +30,7 @@ const handleSignupResponse = async (client, interaction) => {
 
         // Notify the user about the outcome
         const messageContent = action === "accept_signup" 
-            ? `Votre inscription a été validée, bienvenu !`
+            ? `Votre inscription a été validée, bienvenue parmis nous !`
             : `Votre inscription a été rejetée. Si vous avez des questions, veuillez contacter les modérateurs.`;
 
         let informed = true;
