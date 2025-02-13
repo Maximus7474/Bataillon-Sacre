@@ -55,16 +55,18 @@ module.exports = {
         if (newState.channelId === channels.voiceCreate || channels.voiceCreate.includes(toString(newState.channelId))) {
             let newChannelName
 
-            const { activities } = newState.member.presence;
-            activities.filter(act => (
-                act.type === ActivityType.Playing ||
-                act.type === ActivityType.Streaming ||
-                act.type === ActivityType.Competing
-            ));
-
-            if (activities.length > 0) {
-                const activity = activities[0];
-                newChannelName = activity?.name;
+            if (newState.member.presence) {
+                const { activities } = newState.member.presence;
+                activities.filter(act => (
+                    act.type === ActivityType.Playing ||
+                    act.type === ActivityType.Streaming ||
+                    act.type === ActivityType.Competing
+                ));
+    
+                if (activities.length > 0) {
+                    const activity = activities[0];
+                    newChannelName = activity?.name;
+                }
             }
             
             if (!newChannelName){
