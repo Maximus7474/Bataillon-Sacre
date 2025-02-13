@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { ActivityType } = require('discord.js');
 
 const { channels, text } = require('../config.json');
 
@@ -52,10 +53,27 @@ module.exports = {
         if (!temporaryVoiceChannels) temporaryVoiceChannels = [];
 
         if (newState.channelId === channels.voiceCreate || channels.voiceCreate.includes(toString(newState.channelId))) {
-            let newChannel
+            let newChannelName
+
+            const { activities } = newState.member.presence;
+            activities.filter(act => (
+                act.type === ActivityType.Playing ||
+                act.type === ActivityType.Streaming ||
+                act.type === ActivityType.Competing
+            ));
+
+            if (activities.length > 0) {
+                const activity = activities[0];
+                newChannelName = activity?.name;
+            }
+            
+            if (!newChannelName){
+                newChannelName = newState.member.displayName;
+            }
+
             try {
-                newChannel = await newState.channel.clone({
-                    name: text.voiceCreate.replace(/channel_name/g, newState.member.displayName)
+                const newChannel = await newState.channel.clone({
+                    name: text.voiceCreate.replace(/channel_name/g, newChannelName)
                 });
                 
                 await newState.member.voice.setChannel(newChannel);
