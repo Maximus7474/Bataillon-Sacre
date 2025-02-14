@@ -1,4 +1,4 @@
-const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder, PermissionsBitField } = require('discord.js');
 
 const { executeStatement } = require('../utils/database/sqliteHandler');
 
@@ -12,6 +12,7 @@ module.exports = {
     register_command: new SlashCommandBuilder()
         .setName('ajouter_role_jeux')
         .setDescription('Ajouter un salon de forum comme sélecteur de jeux avec l\'émoji "✅"')
+        .setDefaultMemberPermissions(PermissionsBitField.Flags.ManageChannels)
         .addChannelOption(o =>
             o.setName('salon')
             .setDescription('Le salon a utiliser')
