@@ -14,7 +14,7 @@ module.exports = {
             .setTimestamp();
         return interaction.reply({
             embeds: [responseEmbed],
-            ephemeral :true
+            flags: MessageFlags.Ephemeral,
         })
     }
 }

@@ -39,7 +39,7 @@ module.exports = {
                 .setColor('DarkRed')
                 .setThumbnail(guild.iconURL({ dynamic: false, format: 'webp', size: 128 }))
             ],
-            ephemeral :true
+            flags: MessageFlags.Ephemeral,
         });
 
         if (!channel?.isThread()) return interaction.reply({
@@ -50,10 +50,10 @@ module.exports = {
                 .setColor('DarkRed')
                 .setThumbnail(guild.iconURL({ dynamic: false, format: 'webp', size: 128 }))
             ],
-            ephemeral :true
+            flags: MessageFlags.Ephemeral,
         });
 
-        await interaction.deferReply({ ephemeral :true });
+        await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
         executeStatement(
             'INSERT INTO `forum-roles` (post_id, role_id, added_by) VALUES (?,?,?)',
@@ -74,7 +74,7 @@ module.exports = {
                     .setColor(colors.base)
                     .setThumbnail(guild.iconURL({ dynamic: false, format: 'webp', size: 128 }))
                 ],
-                ephemeral :true
+                flags: MessageFlags.Ephemeral,
             });
         })
         .catch(err => {
