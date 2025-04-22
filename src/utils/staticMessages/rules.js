@@ -6,44 +6,63 @@ const { channels, colors } = require('../../config.json');
 
 function createRulesEmbedWithButton() {
     const embed = new EmbedBuilder()
-        .setTitle('Règlement du Bataillon Sacré')
-        .setDescription('Veuillez bien prendre connaissances du règlement et réagir au message pour l\'accepter.')
+        .setTitle('📜 Règlement du serveur Discord du Bataillon sacré.')
+        .setDescription(
+            `> Merci de respecter règlement ci-dessous.\n` +
+            `- *PS : Pour rappel, vous l'avez déjà accepté au préalable en rejoignant notre serveur*.`
+        )
         .setColor(colors.admin)
         .setFields(
             {
-                name: "<a:fleche:834376849382572082> Principes",
-                value: `>>> Soyez toujours respectueux envers les autres. Rien ne justifiera la moquerie ou l'insulte.
-                Always be respectful with others. Nothing will justify mockery or insult.`,
+                name: "### :compass: Principes généraux : ",
+                value: `- Restez respectueux en toutes circonstances. Aucune forme de moquerie, d’insulte ou de harcèlement ne sera tolérée.\n`+
+                        `- L’objectif est de créer un espace sain, inclusif et bienveillant pour tous les membres.`,
                 inline: false
             },
             {
-                name: "<a:fleche:834376849382572082> Canaux",
-                value: `>>> Utilisez les bons canaux et faites un minimum attention à l'orthographe. Gardez le contenu pour adulte en dehors de ce serveur.
-                Use the right channels and pay attention to spelling. Keep adult content off this server.`,
+                name: "### :speech_balloon: Utilisation des canaux :",
+                value: `- Postez vos messages dans les bons salons selon leur thème.\n`+
+                        `- Évitez le flood, le spam ou les messages hors-sujet.\n`+
+                        `- Soignez un minimum votre orthographe pour rester lisible et compréhensible par tous.\n`+
+                        `- Évitez le langage SMS autant que possible.\n`,
                 inline: false
             },
             {
-                name: "<a:fleche:834376849382572082> Promotions",
-                value: `>>> Veuillez demander au **Staff** avant de procéder à la promotion de serveurs, chaines, groupes ou autre (même en privé).
-                Please ask the **Staff** before proceding with promotions of otherservers, chanels, groups or anything else (even in private).`,
+                name: "### :underage: Contenus : ",
+                value: `- Aucun contenu adulte, choquant n’est autorisé en dehors du canal NSFW, quel que soit le salon.\n`+
+                        `- Les discussions sensibles (politique, religion, etc.) doivent rester mesurées et respectueuses.\n`+
+                        `- Les propos racistes, sexistes, homophobes, transphobes ou discriminatoires sont strictement interdits.`,
                 inline: false
             },
             {
-                name: "<a:fleche:834376849382572082> Signalement",
-                value: `>>> Pour signaler des propos déplacés ou du contenu interdit, n'hésitez pas à les mentionner ou de les contacter en privé. Il est préfferable de contacter avec courtoisie la personne concernée pour évoquer le problème en privée en cas de litige.
-                To report inappropriate comments or prohibited content, do not hesitate to mention the staff or to contact them by private message. However it is prefered to discuss with the concerned person about the issue in the event of a dispute.`,
+                name: "### :no_entry_sign: Comportements interdits :",
+                value: `- Ne provoquez pas, ne trichez pas, ne trollez pas.\n`+
+                        `- Le harcèlement, même en messages privés, peut entraîner une sanction sur le serveur.\n`+
+                        `- Ne publiez pas d'informations personnelles (les vôtres ou celles d'autrui).`,
                 inline: false
             },
             {
-                name: "<a:fleche:834376849382572082> Respect",
-                value: `>>> Ne visez pas directement un membre de manière injurieuse ou insultante. Ne provoquez pas, ne trichez pas et ne trollez pas. Toute dispute pourra être effacée du chat par le **Staff** et les auteurs des messages seront sanctioné.
-                Do not target a member in a abusive or insulting manner. Don't provoke, cheat or troll. Any dispute can be removed by the **Staff** and the authors of the messages will be penalized.`,
+                name: "### :shield: Respect et signalements :",
+                value: `- En cas de problème, mentionnez ou contactez un membre du staff en message privé.\n`+
+                        `- Il est conseillé d’essayer une approche cordiale avec la personne concernée avant de faire appel au staff (dans la mesure du possible).\n`+
+                        `- Toute dispute publique pourra être effacée par la modération.`,
                 inline: false
             },
             {
-                name: "<a:fleche:834376849382572082> Contenu interdit",
-                value: `>>> Tout message à charactère discriminant, insultant ou présentant du contenu illégal, insultant, pornographique, raciste ou visant à dénigrer une croyance se vera supprimé. L'auteur du message se vera sanctionné en fonction de la gravité de l'infraction.
-                Any message that discriminates, insultes or contains illegal, insulting, pornographic, racist or denigrating a belief will be removed. And the author will be penalized in function of the gravity of the offence`,
+                name: "### :loudspeaker: Promotions et publicité :",
+                value: `- La publicité pour des serveurs, chaînes, groupes ou autres plateformes est interdite sans l’autorisation préalable du staff. Cela vaut aussi pour les messages privés aux membres du serveur.`,
+                inline: false
+            },
+            {
+                name: "### :closed_lock_with_key: Pseudonymes et avatars :",
+                value: `- Les pseudos et les photos de profil doivent rester respectueux et appropriés.\n`+
+                        `- Tout nom offensant ou inapproprié pourra être modifié ou sanctionné.`,
+                inline: false
+            },
+            {
+                name: "### :scales: Sanctions :",
+                value: `- Le staff se réserve le droit de supprimer tout contenu inapproprié, de sanctionner tout comportement déplacé, voire de bannir un membre selon la gravité des faits.\n`+
+                        `- Les sanctions peuvent aller d’un simple avertissement à un bannissement définitif, sans préavis.`,
                 inline: false
             },
         )
