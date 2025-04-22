@@ -115,3 +115,4 @@ dist
 config.json
 temporaryVoiceChannels.json
 package-lock.json
+pnpm-lock.yaml
