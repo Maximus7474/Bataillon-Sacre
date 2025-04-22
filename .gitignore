@@ -114,3 +114,4 @@ dist
 # Project Specific files
 config.json
 temporaryVoiceChannels.json
+package-lock.json
