@@ -1,8 +1,10 @@
 const fs = require('fs');
 const path = require('path');
+const { SlashCommandBuilder } = require('discord.js');
+
 const log = new require('../src/utils/logger.js');
 const logger = new log("Command loader");
-const { SlashCommandBuilder } = require('@discordjs/builders');
+
 const path_to_commands = path.join(__dirname, '/../src/commands/');
 
 function getAllJsFiles(dirPath, arrayOfFiles) {
