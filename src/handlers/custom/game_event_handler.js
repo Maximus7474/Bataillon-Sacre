@@ -1,7 +1,7 @@
 const { executeStatement, executeQuery } = require("../../utils/database/sqliteHandler");
 const { EmbedBuilder, ThreadAutoArchiveDuration, ChannelType, ButtonStyle, ActionRowBuilder, ButtonBuilder } = require("discord.js");
 
-const { channels, colors, guild } = require('../../config.json');
+const { channels, colors, guild_id } = require('../../config.json');
 
 const log = new require('../../utils/logger.js');
 const logger = new log("Event Handler");
@@ -52,7 +52,7 @@ const generateButtons = async (eventId, queryDB) => {
 }
 
 const addNewEvent = async (client, user, eventData) => {
-    const guild = await client.guilds.fetch(guild);
+    const guild = await client.guilds.fetch(guild_id);
     const channel = await client.channels.fetch(channels.events);
     const imageUrl = eventData.image ?? guild.iconURL({extension: 'webp', size: 256});
 
