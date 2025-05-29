@@ -1,4 +1,5 @@
 {
+  "guild_id": "guild_id",
   "channels": {
     "inscriptionLog": "channel_id",
     "inscriptionMessage": "channel_id",
