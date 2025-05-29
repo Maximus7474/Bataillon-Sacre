@@ -28,7 +28,7 @@ setTimeout(() => {
 
 const generateButtons = async (eventId, queryDB) => {
     const query = `SELECT COUNT(CASE WHEN participating = 1 THEN 1 END) AS joined, COUNT(CASE WHEN participating = 0 THEN 1 END) AS absent FROM event_participants WHERE event_id = ?`;
-    const [results] = queryDB ? await executeQuery(query, [eventId]) : [{joined: 0, absent: 0}];
+    const results = queryDB ? await executeQuery(query, [eventId]) : [{joined: 0, absent: 0}];
 
     const row = new ActionRowBuilder();
   
