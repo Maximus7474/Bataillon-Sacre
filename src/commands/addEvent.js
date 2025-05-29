@@ -1,10 +1,10 @@
 const { EmbedBuilder, PermissionsBitField, SlashCommandBuilder, ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
 const { addNewEvent } = require('../handlers/custom/game_event_handler');
 
-const { channels, colors } = require('../../config.json');
+const { colors } = require('../config.json');
 
-const log = new require('../utils/logger.js');
-const logger = new log("Event Add");
+// const log = new require('../utils/logger.js');
+// const logger = new log("Event Add");
 
 const convertToDateInParis = (dateString) =>  {
     const regex = /^([0-2][0-9]|3[01])\/(0[1-9]|1[0-2])\/(\d{4})(\s([01][0-9]|2[0-3]):([0-5][0-9]))?$/;
