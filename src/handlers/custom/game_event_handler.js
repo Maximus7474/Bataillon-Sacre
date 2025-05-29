@@ -1,10 +1,9 @@
-const { executeStatement, executeQuery } = require("../utils/database/sqliteHandler")
-const ConfigManager = require('../utils/configManager');
+const { executeStatement, executeQuery } = require("../../utils/database/sqliteHandler");
 const { EmbedBuilder, ThreadAutoArchiveDuration, ChannelType, ButtonStyle, ActionRowBuilder, ButtonBuilder } = require("discord.js");
 
-const { channels, colors } = require('../../config.json');
+const { channels, colors, guild } = require('../../config.json');
 
-const log = new require('../utils/logger.js');
+const log = new require('../../utils/logger.js');
 const logger = new log("Event Handler");
 
 let currentEvents = {};
@@ -53,11 +52,8 @@ const generateButtons = async (eventId, queryDB) => {
 }
 
 const addNewEvent = async (client, user, eventData) => {
-
-    const { events } = ConfigManager.getConfig();
-
-    const guild = await client.guilds.fetch(events.guild_id);
-    const channel = await client.channels.fetch(events.event_channel_id);
+    const guild = await client.guilds.fetch(guild);
+    const channel = await client.channels.fetch(channels.events);
     const imageUrl = eventData.image ?? guild.iconURL({extension: 'webp', size: 256});
 
     const embed = new EmbedBuilder()
@@ -157,11 +153,9 @@ const handleEventParticipation = async (client, interaction) => {
         })
     };
 
-    const { events } = ConfigManager.getConfig();
-
     const joined = customId.includes('join') ? true : false;
 
-    const channel = await client.channels.fetch(events.event_channel_id);
+    const channel = await client.channels.fetch(channels.events);
 
     let thread = await channel.threads.fetch(eventData.thread_id);
     if (!thread) thread = await channel.threads.fetch(eventData.thread_id, {force: true});
@@ -244,8 +238,7 @@ const handleEventParticipation = async (client, interaction) => {
 };
 
 const initEvents = async (client) => {
-    const { events } = ConfigManager.getConfig();
-    const channel = await client.channels.fetch(events.event_channel_id);
+    const channel = await client.channels.fetch(channels.events);
 
     Object.keys(currentEvents).forEach(async (id) => {
         const eventData = currentEvents[id];
