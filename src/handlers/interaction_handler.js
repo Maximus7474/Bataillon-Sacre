@@ -9,6 +9,8 @@ const callbacks = GetInteractionHandlersForStaticMessages();
 module.exports = async (client,interaction) => {
     const { customId } = interaction;
 
+    if (customId.startsWith('collector')) return;
+
     if (typeof callbacks[customId] === 'function') {
         logger.info('Running callbacks', customId);
         
