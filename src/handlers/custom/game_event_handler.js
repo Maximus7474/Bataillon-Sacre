@@ -161,6 +161,7 @@ const handleEventParticipation = async (client, interaction) => {
     if (!thread) thread = await channel.threads.fetch(eventData.thread_id, {force: true});
 
     try {
+        await thread.members.fetch();
         const inThread = thread.members.cache.has(member.id);
 
         if ((joined && inThread) || (!joined && !inThread)) return interaction.reply({
