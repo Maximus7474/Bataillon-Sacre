@@ -5,7 +5,8 @@
     "rules": "channel_id",
     "voiceCreate": [
       "channel_id"
-    ]
+    ],
+    "events": "channel_id"
   },
   "colors": {
     "base": "#0099ff",
