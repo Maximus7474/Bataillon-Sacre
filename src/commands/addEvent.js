@@ -49,15 +49,15 @@ module.exports = {
         .addIntegerOption(o =>
             o.setName('duration')
             .setNameLocalization('fr', 'duree')
-            .setDescription('The maximum duration of the event in hours.')
-            .setDescriptionLocalization('fr', 'La durée maximale de l\'évènement en heures.')
+            .setDescription('(optional) The maximum duration of the event in hours.')
+            .setDescriptionLocalization('fr', '(optionnel) La durée maximale de l\'évènement en heures.')
             .setMinValue(1)
             .setMaxValue(5)
         )
         .addStringOption(o =>
             o.setName('image')
-            .setDescription('An image to display, paste the image url')
-            .setDescriptionLocalization('fr', 'Un liens d\'une image pour décorer')
+            .setDescription('(optional) An image to display, paste the image url')
+            .setDescriptionLocalization('fr', '(optionnel) Un liens d\'une image pour décorer')
         ),
     async execute(client, interaction) {
         const { user, options } = interaction;
