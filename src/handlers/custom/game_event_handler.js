@@ -164,7 +164,7 @@ const handleEventParticipation = async (client, interaction) => {
         await thread.members.fetch();
         const inThread = thread.members.cache.has(member.id);
 
-        if ((joined && inThread) || (!joined && !inThread)) return interaction.reply({
+        if (joined && inThread) return interaction.reply({
             embeds: [
                 new EmbedBuilder()
                 .setTitle('Hummm...')
