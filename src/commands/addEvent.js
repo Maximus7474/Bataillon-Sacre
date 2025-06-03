@@ -58,6 +58,11 @@ module.exports = {
             o.setName('image')
             .setDescription('(optional) An image to display, paste the image url')
             .setDescriptionLocalization('fr', '(optionnel) Un liens d\'une image pour décorer')
+        )
+        .addRoleOption(o =>
+            o.setName('role')
+            .setDescription('(optional) A role to mention when sharing the event')
+            .setDescriptionLocalization('fr', '(optionnel) Un rôle a mentioner lors du partage de l\'event')
         ),
     async execute(client, interaction) {
         const { user, options } = interaction;
@@ -72,12 +77,14 @@ module.exports = {
         const duration = dateString.length <= 10 ? 24 : options.getInteger('duration') || 1;
         const title = options.getString('title');
         const image = options.getString('image') || null;
+        const role = options.getRole('role') || null;
     
         let eventData = {
             title,
             duration,
             date,
-            image
+            image,
+            role: role ? role.id : null,
         };
     
         const customId = 'collector_event_description';

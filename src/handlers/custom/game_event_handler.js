@@ -66,6 +66,7 @@ const addNewEvent = async (client, user, eventData) => {
         .setThumbnail(imageUrl);
 
     const message = await channel.send({
+        content: eventData.role ? `<@&${eventData.role}>` : '',
         embeds: [embed]
     });
 
