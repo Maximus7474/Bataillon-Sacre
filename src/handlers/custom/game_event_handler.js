@@ -182,7 +182,7 @@ const handleEventParticipation = async (client, interaction) => {
         if (joined && !inThread) {
             await thread.send(`<@${member.id}> s'est signalé comme participant à __${eventData.title}__`);
         } else if (!joined && inThread) {
-            await thread.send(`${member.displayName || member.nickname} ne participes plus à __${eventData.title}__`);
+            await thread.send(`${member.displayName || member.nickname} ne participe plus à __${eventData.title}__`);
             await thread.members.remove(member.id);
         }
     
