@@ -180,7 +180,7 @@ const handleEventParticipation = async (client, interaction) => {
         });
 
         if (joined && !inThread) {
-            await thread.send(`<@${member.id}> s'est signaler comme participant à __${eventData.title}__`);
+            await thread.send(`<@${member.id}> s'est signalé comme participant à __${eventData.title}__`);
         } else if (!joined && inThread) {
             await thread.send(`${member.displayName || member.nickname} ne participes plus à __${eventData.title}__`);
             await thread.members.remove(member.id);
@@ -211,7 +211,7 @@ const handleEventParticipation = async (client, interaction) => {
                 .setDescription(
                     joined ? 
                     `Vous pouvez discutez au sujet de l\'évènement ici <#${eventData.thread_id}>.` :
-                    `Vous avez été retirer de l'évènement et du fil de discussion.`
+                    `Vous avez été retiré de l'évènement et du fil de discussion.`
                 )
                 .setColor('DarkBlue')
                 .setThumbnail(client.user.displayAvatarURL({ dynamic: true, format: 'webp', size: 128 }))
