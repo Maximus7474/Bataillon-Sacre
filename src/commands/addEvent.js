@@ -129,13 +129,13 @@ module.exports = {
 
         await collected.reply({
             embeds: [new EmbedBuilder()
-                .setTitle(`Nouveau Event: ${eventData.label}`)
+                .setTitle(`Nouveau Event: ${eventData.title}`)
                 .setColor(colors.admin)
                 .setDescription(`- Date: <t:${Math.round(eventData.date.getTime()/1000)}>\n- Durée: ${eventData.duration} hours\n- Détails:\n>>> ${eventData.description}`)
                 .setThumbnail(eventData.image ?? interaction.guild.iconURL({extension: 'webp', size: 256}))
                 .setAuthor({name: client.user.globalName || "Événementiel", iconURL: client.user.displayAvatarURL({ dynamic: true, format: 'webp', size: 64 })})
             ],
-            content: `Event created successfully!\nTitle: ${eventData.label}\n`,
+            // content: `Event created successfully!\nTitle: ${eventData.title}\n`,
             ephemeral: true,
         });
 
