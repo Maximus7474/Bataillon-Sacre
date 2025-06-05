@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS `forum-roles` (
     added_by TEXT DEFAULT '{ "username": "SYSTEM", "id": "SYSTEM" }'
 );
 
-CREATE TABLE IF NOT EXISTS upcoming_events (
+CREATE TABLE IF NOT EXISTS `upcoming_events` (
     `id` INTEGER PRIMARY KEY AUTOINCREMENT,
     `thread_id` TEXT NUT NULL,
     `message_id` TEXT NUT NULL,
@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS upcoming_events (
     `added` INTEGER DEFAULT (strftime('%s', 'now')),
     `added_by` TEXT NOT NULL,
     
+    `role_id` TEXT DEFAULT NULL,
     `title` TEXT NOT NULL,
     `image` TEXT DEFAULT NULL,
     `date` INTEGER NOT NULL,
