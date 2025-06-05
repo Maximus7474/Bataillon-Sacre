@@ -48,10 +48,9 @@ const createSchedule = (client, channel, id) => {
     const reminderParis = eventParis.minus({ hours: 2 });
     const reminderDateUtc = reminderParis.toUTC().toJSDate();
 
-    if (reminderDateUtc < Date.now()) return console.log('Skipping as reminder timestamp has already passed');
+    if (reminderDateUtc < Date.now()) return;
 
     const job = schedule.scheduleJob(reminderDateUtc, async () => {
-        console.log('schedule triggered', eventData.title)
         try {
             const message = await channel.messages.fetch({ limit: 20, message: eventData.message_id });
             await message.reply({
@@ -59,7 +58,7 @@ const createSchedule = (client, channel, id) => {
             });
             logger.success(`Reminder sent for ${eventData.title}`)
         } catch (err) {
-            console.error("Failed to send reminder:", err);
+            logger.error("Failed to send reminder:", err);
         }
     });
 
@@ -155,7 +154,7 @@ const handleEventParticipation = async (client, interaction) => {
             embeds: interaction.message.embeds,
             components: []
         })
-        .catch(err => console.log('Unable to remove components:', err.message));
+        .catch(err => logger.warn('Unable to remove components:', err.message));
 
         delete currentEvents[eventId];
 
@@ -268,15 +267,12 @@ const InitEvents = async (client) => {
             };
         }
 
-        console.log(events);
-
         logger.success(`Loaded`, events.length, 'events.');
     } catch (err) {
         logger.error('Unable to load events', err);
         return;
     }
     
-    console.log('initiazing events');
     const channel = await client.channels.fetch(channels.events);
 
     Object.keys(currentEvents).forEach(async (id) => {
