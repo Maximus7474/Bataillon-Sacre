@@ -1,3 +1,5 @@
+const { DateTime } = require("luxon");
+const schedule = require("node-schedule");
 const { executeStatement, executeQuery } = require("../../utils/database/sqliteHandler");
 const { EmbedBuilder, ThreadAutoArchiveDuration, ChannelType, ButtonStyle, ActionRowBuilder, ButtonBuilder } = require("discord.js");
 
@@ -7,24 +9,6 @@ const log = new require('../../utils/logger.js');
 const logger = new log("Event Handler");
 
 let currentEvents = {};
-
-setTimeout(() => {
-    const time = new Date();
-    executeQuery('SELECT `id`, `date`, `thread_id`, `message_id`, `duration`, `title` FROM upcoming_events WHERE date > ?', [time.getTime()], 'all')
-    .then(r => {
-        r.forEach(element => {
-            currentEvents[element.id] = {
-                ...element,
-                date: (new Date(element.date))
-            };
-        });
-
-        logger.success(`Loaded`, r.length, 'events.')
-    })
-    .catch((r) => {
-        logger.error('Unable to load events', r)
-    });
-}, 500);
 
 const generateButtons = async (eventId, queryDB) => {
     const query = `SELECT COUNT(CASE WHEN participating = 1 THEN 1 END) AS joined, COUNT(CASE WHEN participating = 0 THEN 1 END) AS absent FROM event_participants WHERE event_id = ?`;
@@ -49,6 +33,37 @@ const generateButtons = async (eventId, queryDB) => {
     );
 
     return row;
+};
+
+const createSchedule = (client, channel, id) => {
+    const eventData = currentEvents[id];
+
+    const eventUtc = DateTime.fromJSDate(eventData.date, { zone: "utc" });
+    if (!eventUtc.isValid) {
+        logger.error('Invalid date:', eventData.date, eventUtc.invalidExplanation);
+        return;
+    }
+
+    const eventParis = eventUtc.setZone("Europe/Paris");
+    const reminderParis = eventParis.minus({ hours: 2 });
+    const reminderDateUtc = reminderParis.toUTC().toJSDate();
+
+    if (reminderDateUtc < Date.now()) return console.log('Skipping as reminder timestamp has already passed');
+
+    const job = schedule.scheduleJob(reminderDateUtc, async () => {
+        console.log('schedule triggered', eventData.title)
+        try {
+            const message = await channel.messages.fetch({ limit: 20, message: eventData.message_id });
+            await message.reply({
+                content: `<@&${eventData.role_id}> - L'évènement démarre dans 2h\n> ${message.url}`,
+            });
+            logger.success(`Reminder sent for ${eventData.title}`)
+        } catch (err) {
+            console.error("Failed to send reminder:", err);
+        }
+    });
+
+    currentEvents[id].job = job;
 }
 
 const addNewEvent = async (client, user, eventData) => {
@@ -112,6 +127,8 @@ const addNewEvent = async (client, user, eventData) => {
             embeds: message.embeds,
             components: [row]
         });
+
+        createSchedule(client, channel, id);
     })
     .catch(err => {
         logger.error('Unable to insert new event in the DB:', err.message);
@@ -239,23 +256,49 @@ const handleEventParticipation = async (client, interaction) => {
     }
 };
 
-const initEvents = async (client) => {
+const InitEvents = async (client) => {
+    const time = new Date();
+    try {
+        const events = await executeQuery('SELECT `id`, `date`, `thread_id`, `role_id`, `message_id`, `duration`, `title` FROM upcoming_events WHERE date > ?', [time.getTime()], 'all');
+
+        for (const element of events) {
+            currentEvents[element.id] = {
+                ...element,
+                date: new Date(element.date)
+            };
+        }
+
+        console.log(events);
+
+        logger.success(`Loaded`, events.length, 'events.');
+    } catch (err) {
+        logger.error('Unable to load events', err);
+        return;
+    }
+    
+    console.log('initiazing events');
     const channel = await client.channels.fetch(channels.events);
 
     Object.keys(currentEvents).forEach(async (id) => {
         const eventData = currentEvents[id];
 
         const row = await generateButtons(id, true);
+        try {
+            let message = await channel.messages.fetch({limit: 20, message: eventData.message_id});
+            if (!message) message = await channel.messages.fetch(eventData.message_id, {force: true});
 
-        let message = await channel.messages.fetch({limit: 20, message: eventData.message_id});
-        if (!message) message = await channel.messages.fetch(eventData.message_id, {force: true});
+            if (message) {
+                await message.edit({
+                    embeds: message.embeds,
+                    components: [row]
+                });
+            }
 
-        if (message) message.edit({
-            embeds: message.embeds,
-            components: [row]
-        })
-        .catch(r => logger.error('Unable to update message', r));
+            createSchedule(client, channel, id);
+        } catch (err) {
+            logger.error('Unable to update message', eventData.title, err);
+        }
     });
-}
+};
 
-module.exports = { addNewEvent, handleEventParticipation, initEvents }
+module.exports = { addNewEvent, handleEventParticipation, InitEvents }
