@@ -247,7 +247,7 @@ const initEvents = async (client) => {
 
         const row = await generateButtons(id, true);
 
-        let message = await channel.messages.fetch({limit: 2, message: eventData.message_id});
+        let message = await channel.messages.fetch({limit: 20, message: eventData.message_id});
         if (!message) message = await channel.messages.fetch(eventData.message_id, {force: true});
 
         if (message) message.edit({
