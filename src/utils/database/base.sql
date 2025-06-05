@@ -36,4 +36,4 @@ CREATE TABLE IF NOT EXISTS event_participants (
  */
 
 -- 05/06/2025 - 23:28
-ALTER TABLE `upcoming_events` ADD `role_id` TEXT DEFAULT NULL;
+-- ALTER TABLE `upcoming_events` ADD `role_id` TEXT DEFAULT NULL;
