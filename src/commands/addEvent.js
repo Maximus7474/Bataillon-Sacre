@@ -1,4 +1,5 @@
 const { EmbedBuilder, PermissionsBitField, SlashCommandBuilder, ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
+const { DateTime } = require('luxon');
 const { addNewEvent } = require('../handlers/custom/game_event_handler');
 
 const { colors } = require('../config.json');
@@ -6,21 +7,29 @@ const { colors } = require('../config.json');
 // const log = new require('../utils/logger.js');
 // const logger = new log("Event Add");
 
-const convertToDateInParis = (dateString) =>  {
-    const regex = /^([0-2][0-9]|3[01])\/(0[1-9]|1[0-2])\/(\d{4})(\s([01][0-9]|2[0-3]):([0-5][0-9]))?$/;
+const convertToDateInParis = (dateString) => {
+    const regex = /^([0-2][0-9]|3[01])\/(0[1-9]|1[0-2])\/(\d{4})(?:\s([01][0-9]|2[0-3]):([0-5][0-9]))?$/;
     const match = dateString.match(regex);
-    
+
     if (!match) return null;
 
-    const [, day, month, year, , hours, minutes] = match;
+    const [, day, month, year, hours, minutes] = match;
 
-    const time = hours && minutes ? `${hours}:${minutes}` : '00:00';
+    const dt = DateTime.fromObject(
+        {
+            day: parseInt(day),
+            month: parseInt(month),
+            year: parseInt(year),
+            hour: parseInt(hours ?? "0"),
+            minute: parseInt(minutes ?? "0"),
+        },
+        { zone: "Europe/Paris" }
+    );
 
-    const parisDateString = `${year}-${month}-${day}T${time}:00`;
+    if (!dt.isValid) return null;
 
-    const date = new Date(parisDateString);
-    return date;
-}
+    return dt.toJSDate();
+};
 
 module.exports = {
     register_command: new SlashCommandBuilder()
