@@ -42,6 +42,5 @@ client.login(process.env.TOKEN);
 
 client.once(Events.ClientReady, (client)=>{
     InitializeStaticMessages(client);
-    console.log('InitEvents called');
     InitEvents(client);
 });
