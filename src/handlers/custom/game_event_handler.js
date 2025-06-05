@@ -55,7 +55,7 @@ const createSchedule = (client, channel, id) => {
         try {
             const message = await channel.messages.fetch({ limit: 20, message: eventData.message_id });
             await message.reply({
-                content: `<@&${eventData.role_id}> - L'évènement démarre dans 2h\n> ${message.url}`,
+                content: `${eventData.role_id ? `<@&${eventData.role_id}> ` : ''}- L'évènement démarre dans 2h\n> ${message.url}`,
             });
             logger.success(`Reminder sent for ${eventData.title}`)
         } catch (err) {
