@@ -30,3 +30,10 @@ CREATE TABLE IF NOT EXISTS event_participants (
     `participating` INTEGER DEFAULT 0,
     PRIMARY KEY (event_id, user_id)
 );
+
+/* Migrations
+    - Comment a line once run
+ */
+
+-- 05/06/2025 - 23:28
+ALTER TABLE `upcoming_events` ADD `role_id` TEXT DEFAULT NULL;
