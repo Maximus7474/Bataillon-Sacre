@@ -96,8 +96,8 @@ const addNewEvent = async (client, user, eventData) => {
     });
 
     executeStatement(
-        'INSERT INTO upcoming_events (thread_id, message_id, added_by, title, date, duration, description) VALUES (?,?,?,?,?,?,?)',
-        [thread.id, message.id, JSON.stringify({id: user.id, username: user.username}), eventData.title, eventData.date, eventData.duration, eventData.description]
+        'INSERT INTO upcoming_events (thread_id, message_id, added_by, title, date, role_id, duration, description) VALUES (?,?,?,?,?,?,?)',
+        [thread.id, message.id, JSON.stringify({id: user.id, username: user.username}), eventData.title, eventData.date, eventData.role, eventData.duration, eventData.description]
     )
     .then(async (id) => {
         currentEvents[id] = {
