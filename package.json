@@ -43,5 +43,8 @@
         "mocha": "^10.8.2",
         "node-schedule": "^2.1.1",
         "sqlite3": "^5.1.7"
+    },
+    "devDependencies": {
+        "node-cron": "^4.2.1"
     }
 }
