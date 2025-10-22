@@ -10,6 +10,7 @@ const { initializeDatabase } = require('./utils/database/sqliteHandler')
 
 const { compareAndUpdateConfigFiles } = require('./utils/checkConfig');
 const { InitEvents } = require('./handlers/custom/game_event_handler')
+const { initializeAntiPostArchiver } = require('./handlers/custom/anti_post_archiver')
 
 assert(process.env.TOKEN, "A Discord Token for your bot is required ! Please go to your application page to get it! Set your token then as an enviormental variable with the TOKEN variable name!")
 
@@ -43,4 +44,5 @@ client.login(process.env.TOKEN);
 client.once(Events.ClientReady, (client)=>{
     InitializeStaticMessages(client);
     InitEvents(client);
+    initializeAntiPostArchiver(client);
 });
